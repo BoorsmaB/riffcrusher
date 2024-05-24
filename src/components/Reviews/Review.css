@@ -1,0 +1,52 @@
+.review-text {
+  text-align: left;
+}
+
+.review-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: auto;
+}
+
+.review-cover {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.review-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.review-title {
+  font-size: 2em;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.review-rating {
+  font-size: 1.5em;
+}
+
+.rating-value {
+  font-weight: bold;
+}
+
+.review-image-container {
+  display: flex;
+  justify-content: center;
+}
+
+.centered-banner {
+  text-align: center;
+}
+
+.small-banner {
+  max-width: 100%;
+  height: auto;
+}

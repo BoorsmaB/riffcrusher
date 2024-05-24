@@ -1,0 +1,43 @@
+header {
+  background-color: rgb(151, 22, 22);
+  padding: 10px 0;
+  text-align: center;
+}
+
+.logo img {
+  max-width: 300px; /* Adjust the maximum width of the logo for larger screens */
+}
+nav ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+nav ul li:last-child {
+  margin-right: 0;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: black;
+}
+
+/* Styles for smaller screens (e.g., phones) */
+@media (max-width: 768px) {
+  .logo img {
+    max-width: 150px; /* Adjust the maximum width of the logo for smaller screens */
+  }
+
+  nav ul {
+    text-align: center; /* Center align the navigation links for smaller screens */
+  }
+
+  nav ul li {
+    display: block;
+    margin: 10px 0;
+  }
+}
