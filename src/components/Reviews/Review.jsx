@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import MarkdownRenderer from "../MarkdownRenderer/MarkdownRenderer";
+import Tags from "./Tags"; // Ensure correct import
 import "./Review.css";
 
 function Review() {
@@ -12,8 +13,9 @@ function Review() {
     const fetchReview = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1337/api/metalreviews/${id}?populate=Albumcover&populate=BannerReview&populate=createdBy`
+          `http://localhost:1337/api/metalreviews/${id}?populate=*`
         );
+        console.log("Full response data:", response.data);
         if (
           response.data &&
           response.data.data &&
@@ -41,6 +43,8 @@ function Review() {
   const albumCoverUrl = review.Albumcover?.data?.attributes?.url;
   const bannerReviewUrl = review.BannerReview?.data?.attributes?.url;
 
+  console.log("Review tags:", review.tags); // Debugging line
+
   return (
     <div className="review-container">
       <div className="home-container">
@@ -63,6 +67,7 @@ function Review() {
         <p className="review-rating">
           Rating: <span className="rating-value">{review.Rating}</span>
         </p>
+        {review.tags && <Tags tags={review.tags} />}
         {bannerReviewUrl && (
           <img
             src={`http://localhost:1337${bannerReviewUrl}`}

@@ -1,0 +1,335 @@
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.tag {
+  padding: 5px 10px;
+  border-radius: 1px;
+  color: white;
+  font-weight: bold;
+}
+
+.tag-alternativemetal {
+  background-color: rgb(66, 80, 74);
+  border: 1px solid white;
+}
+
+.tag-atmosphericblackmetal {
+  background-color: rgb(78, 98, 80);
+  border: 1px solid white;
+}
+
+.tag-avantgardedeathmetal {
+  background-color: rgb(47, 19, 45);
+  border: 1px solid white;
+}
+
+.tag-avantgardemetal {
+  background-color: rgb(101, 28, 132);
+  border: 1px solid white;
+}
+
+.tag-blackgaze {
+  background-color: rgb(6, 46, 57);
+  border: 1px solid white;
+}
+
+.tag-blackmetal {
+  background-color: black;
+  border: 1px solid white;
+}
+
+.tag-brutaldeathmetal {
+  background-color: rgb(51, 3, 3);
+  border: 1px solid white;
+}
+
+.tag-crustpunk {
+  background-color: rgba(67, 61, 65, 0.703);
+  border: 1px solid white;
+}
+
+.tag-cybermetal {
+  background-color: rgb(2, 221, 255);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-darkmetal {
+  background-color: rgb(75, 75, 75);
+  border: 1px solid white;
+}
+
+.tag-deathcore {
+  background-color: rgb(39, 14, 19);
+  border: 1px solid white;
+  color: white;
+}
+
+.tag-deathdoom {
+  background-color: rgb(135, 63, 0);
+  border: 1px solid white;
+}
+
+.tag-deathgrind {
+  background-color: rgb(153, 42, 8);
+  border: 1px solid white;
+}
+
+.tag-deathmetal {
+  background-color: rgb(96, 15, 15);
+  border: 1px solid white;
+}
+
+.tag-djent {
+  background-color: rgb(232, 238, 114);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-doommetal {
+  background-color: rgb(56, 58, 7);
+  border: 1px solid white;
+  color: white;
+}
+
+.tag-dronemetal {
+  background-color: rgb(174, 76, 0);
+  border: 1px solid white;
+}
+
+.tag-electronicmetal {
+  background-color: rgb(232, 239, 31);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-epicmetal {
+  background-color: rgb(108, 82, 196);
+  border: 1px solid white;
+}
+
+.tag-experimentalmetal {
+  background-color: rgb(219, 142, 60);
+  border: 1px solid white;
+}
+
+.tag-folkmetal {
+  background-color: rgb(27, 118, 77);
+  border: 1px solid white;
+}
+
+.tag-glammetal {
+  background-color: rgb(213, 43, 215);
+  border: 1px solid white;
+}
+
+.tag-goregrind {
+  background-color: rgb(34, 30, 28);
+  border: 1px solid white;
+}
+
+.tag-gothicmetal {
+  background-color: rgb(64, 64, 64);
+  border: 1px solid white;
+  color: white;
+}
+
+.tag-grindcore {
+  background-color: rgb(74, 58, 37);
+  border: 1px solid white;
+}
+
+.tag-groovemetal {
+  background-color: rgb(239, 224, 204);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-hardcore {
+  background-color: rgb(221, 3, 3);
+  border: 1px solid white;
+}
+
+.tag-heavymetal {
+  background-color: darkgray;
+  border: 1px solid white;
+}
+
+.tag-industrialblackmetal {
+  background-color: rgb(26, 11, 78);
+  border: 1px solid white;
+}
+
+.tag-industrialmetal {
+  background-color: rgb(141, 141, 141);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-kawaiimetal {
+  background-color: rgb(254, 15, 166);
+  border: 1px solid white;
+}
+
+.tag-mathcore {
+  background-color: rgb(170, 168, 164);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-mathmetal {
+  background-color: rgb(83, 85, 83);
+  border: 1px solid white;
+}
+
+.tag-metalcore {
+  background-color: rgb(178, 178, 133);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-melodicdeathmetal {
+  background-color: rgb(80, 42, 16);
+  border: 1px solid white;
+}
+
+.tag-melodichardcore {
+  background-color: rgb(77, 50, 79);
+  border: 1px solid white;
+}
+
+.tag-numetal {
+  background-color: rgb(252, 80, 80);
+  border: 1px solid white;
+}
+
+.tag-nwobhm {
+  background-color: rgb(203, 66, 59);
+  border: 1px solid white;
+}
+
+.tag-osdm {
+  background-color: rgb(45, 7, 7);
+  border: 1px solid white;
+}
+
+.tag-paganmetal {
+  background-color: rgb(119, 139, 145);
+  border: 1px solid white;
+}
+
+.tag-piratemetal {
+  background-color: rgb(204, 204, 204);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-posthardcore {
+  background-color: rgb(117, 81, 81);
+  border: 1px solid white;
+}
+
+.tag-postmetal {
+  background-color: rgb(139, 203, 238);
+  border: 1px solid white;
+}
+
+.tag-powermetal {
+  background-color: rgb(231, 155, 238);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-progressivedeathmetal {
+  background-color: rgb(29, 0, 103);
+  border: 1px solid white;
+}
+
+.tag-progressivemetal {
+  background-color: rgb(46, 167, 194);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-punk {
+  background-color: rgb(163, 50, 154);
+  border: 1px solid white;
+}
+
+.tag-punkrock {
+  background-color: rgb(47, 33, 96);
+  border: 1px solid white;
+}
+
+.tag-rapcore {
+  background-color: rgb(51, 75, 61);
+  border: 1px solid white;
+}
+
+.tag-screamo {
+  background-color: rgb(118, 180, 224);
+  border: 1px solid white;
+}
+
+.tag-sludgemetal {
+  background-color: rgb(62, 141, 76);
+  border: 1px solid white;
+}
+
+.tag-slamdeathmetal {
+  background-color: rgb(40, 34, 19);
+  border: 1px solid white;
+}
+
+.tag-speedmetal {
+  background-color: rgb(242, 174, 86);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-stonermetal {
+  background-color: rgb(8, 82, 21);
+  border: 1px solid white;
+}
+
+.tag-suicidaldepressiveblackmetal {
+  background-color: rgb(23, 21, 21);
+  border: 1px solid white;
+  color: white;
+}
+
+.tag-symphonicblackmetal {
+  background-color: rgb(75, 44, 73);
+  border: 1px solid white;
+}
+
+.tag-symphonicmetal {
+  background-color: rgb(148, 11, 84);
+  border: 1px solid white;
+}
+
+.tag-technicaldeathmetal {
+  background-color: rgb(17, 0, 129);
+  border: 1px solid white;
+  color: white;
+}
+
+.tag-technicalthrashmetal {
+  background-color: rgb(34, 153, 18);
+  border: 1px solid white;
+}
+
+.tag-thrashmetal {
+  background-color: rgb(156, 248, 8);
+  border: 1px solid white;
+  color: black;
+}
+
+.tag-vikingmetal {
+  background-color: rgb(60, 110, 125);
+  border: 1px solid white;
+}

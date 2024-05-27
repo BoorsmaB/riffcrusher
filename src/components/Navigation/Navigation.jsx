@@ -7,6 +7,7 @@ function Navigation() {
     <header>
       <div className="logo">
         <img src="/assets/j_logo.png" alt="Logo" />
+        <p className="slogan">"We love everything loud!"</p>
       </div>
       <nav>
         <ul>
