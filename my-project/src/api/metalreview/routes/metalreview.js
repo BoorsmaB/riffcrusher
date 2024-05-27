@@ -1,9 +1,14 @@
-'use strict';
+"use strict";
 
-/**
- * metalreview router
- */
+const { createCoreRouter } = require("@strapi/strapi").factories;
 
-const { createCoreRouter } = require('@strapi/strapi').factories;
-
-module.exports = createCoreRouter('api::metalreview.metalreview');
+module.exports = createCoreRouter("api::metalreview.metalreview", {
+  config: {
+    find: {
+      middlewares: ["api::metalreview.default-metalreview-populate"],
+    },
+    findOne: {
+      middlewares: ["api::metalreview.default-metalreview-populate"],
+    },
+  },
+});

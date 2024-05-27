@@ -46,7 +46,14 @@
   text-align: center;
 }
 
-.small-banner {
+.banner-review {
   max-width: 100%;
   height: auto;
+}
+
+.review-author {
+  margin-top: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-align: center; /* Adjust as needed for your layout */
 }

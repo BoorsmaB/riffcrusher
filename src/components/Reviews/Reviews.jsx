@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 import "./Reviews.css";
 
 function Reviews() {
@@ -44,24 +45,38 @@ function Reviews() {
         {reviewedAlbums.map((album) => {
           const albumCoverUrl =
             album.attributes.Albumcover?.data?.attributes?.url;
+          const cardStyle = {
+            backgroundColor: "rgb(210, 210, 210)",
+            color: "black",
+          };
           return (
-            <li key={album.id} className="album-card">
-              {albumCoverUrl && (
-                <img
-                  src={`http://localhost:1337${albumCoverUrl}`}
-                  alt={album.attributes.Title}
-                  className="album-cover"
-                />
-              )}
-              <div className="album-info">
-                <h3>{album.attributes.Title}</h3>
-                <h4>{album.attributes.Band}</h4>
-                <p>
-                  {album.attributes.Review.split(" ").slice(0, 20).join(" ")}...
-                </p>
-                <Link to={`/review/${album.id}`}>Read more</Link>
-              </div>
-            </li>
+            <Link
+              to={`/review/${album.id}`}
+              className="album-link"
+              key={album.id}
+            >
+              <li className="album-card" style={cardStyle}>
+                {albumCoverUrl && (
+                  <img
+                    src={`http://localhost:1337${albumCoverUrl}`}
+                    alt={album.attributes.Title}
+                    className="album-cover"
+                  />
+                )}
+                <div className="album-info">
+                  <h3>{album.attributes.Title}</h3>
+                  <h4>{album.attributes.Band}</h4>
+                  <div className="review-preview">
+                    <ReactMarkdown>
+                      {`${album.attributes.Review.split(" ")
+                        .slice(0, 20)
+                        .join(" ")} ...`}
+                    </ReactMarkdown>
+                  </div>
+                  <p className="read-more">Read more</p>
+                </div>
+              </li>
+            </Link>
           );
         })}
       </ul>

@@ -1,9 +1,63 @@
-/* ContactsPage.css */
+/* Contact.css */
 .contacts-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
+.contacts-container h1 {
+  text-align: center;
+}
+
+.contacts-container p {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+}
+
+input,
+textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+textarea {
+  width: 100%; /* Set width to 100% */
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(151, 22, 22);
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
 @media (max-width: 768px) {
+  .contacts-container {
+    padding: 10px;
+  }
+
+  form {
+    gap: 15px;
+  }
 }

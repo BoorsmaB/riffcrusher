@@ -12,7 +12,7 @@ function Review() {
     const fetchReview = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1337/api/metalreviews/${id}?populate=Albumcover&populate=BannerReview`
+          `http://localhost:1337/api/metalreviews/${id}?populate=Albumcover&populate=BannerReview&populate=createdBy`
         );
         if (
           response.data &&
@@ -53,19 +53,22 @@ function Review() {
             />
           )}
           <h2 className="review-title">{review.Title}</h2>
+          {review.createdBy && (
+            <p className="review-author">
+              Written by: {review.createdBy.data.attributes.username}
+            </p>
+          )}
         </div>
         <MarkdownRenderer content={review.Review} />
         <p className="review-rating">
           Rating: <span className="rating-value">{review.Rating}</span>
         </p>
         {bannerReviewUrl && (
-          <div className="centered-banner">
-            <img
-              src={`http://localhost:1337${bannerReviewUrl}`}
-              alt="Banner Review"
-              className="banner-review small-banner"
-            />
-          </div>
+          <img
+            src={`http://localhost:1337${bannerReviewUrl}`}
+            alt="Banner Review"
+            className="banner-review"
+          />
         )}
       </div>
     </div>

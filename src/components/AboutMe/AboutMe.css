@@ -1,9 +1,40 @@
-/* AboutMe.css */
-.about-me-container {
+.aboutme-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
+.aboutme-header {
+  margin-bottom: 20px;
+}
+
+.aboutme-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  border: 2px solid whitesmoke;
+  border-radius: 8px;
+  background-color: #2b2b2b;
+}
+
+.aboutme-text {
+  flex: 1;
+}
+
+.jova-avatar {
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+}
+
 @media (max-width: 768px) {
+  .aboutme-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .jova-avatar {
+    max-width: 100%;
+  }
 }

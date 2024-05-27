@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import MarkdownRenderer from "../MarkdownRenderer/MarkdownRenderer";
+import ReactMarkdown from "react-markdown";
 import "./Home.css";
 
 function Home() {
@@ -54,20 +54,31 @@ function Home() {
             album.attributes.Albumcover?.data?.attributes?.url;
           return (
             <li key={album.id} className="album-card">
-              {albumCoverUrl && (
-                <img
-                  src={`http://localhost:1337${albumCoverUrl}`}
-                  alt={album.attributes.Title}
-                  className="album-cover"
-                />
-              )}
-              <div className="album-info">
-                <h3>{album.attributes.Title}</h3>
-                <h4>{album.attributes.Band}</h4>
-                <MarkdownRenderer markdown={album.attributes.Review} />{" "}
-                {/* Render the Markdown content using MarkdownRenderer */}
-                <Link to={`/review/${album.id}`}>Read more</Link>
-              </div>
+              <Link to={`/review/${album.id}`} className="album-link">
+                {albumCoverUrl && (
+                  <img
+                    src={`http://localhost:1337${albumCoverUrl}`}
+                    alt={album.attributes.Title}
+                    className="album-cover"
+                  />
+                )}
+                <div className="album-info">
+                  <h3>{album.attributes.Title}</h3>
+                  <h4>{album.attributes.Band}</h4>
+                  <ReactMarkdown
+                    components={{
+                      p: ({ node, ...props }) => (
+                        <p style={{ fontWeight: "normal" }} {...props} />
+                      ),
+                    }}
+                  >
+                    {`${album.attributes.Review.split(" ")
+                      .slice(0, 20)
+                      .join(" ")} ...`}
+                  </ReactMarkdown>
+                  <p className="read-more">Read more</p>
+                </div>
+              </Link>
             </li>
           );
         })}
