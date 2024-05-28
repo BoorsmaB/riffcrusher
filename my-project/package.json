@@ -19,6 +19,7 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
     "strapi-plugin-email": "^3.6.11",
+    "strapi-plugin-oembed": "^1.2.1",
     "styled-components": "5.3.3"
   },
   "author": {

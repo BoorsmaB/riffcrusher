@@ -31,6 +31,9 @@ function AboutMe() {
             community-driven platform bringing everyone together who enjoys loud
             music, scary movies, and video games.
           </p>
+          <a href="https://www.twitch.tv/ItsJovanaar">
+            https://www.twitch.tv/ItsJovanaar
+          </a>
         </div>
       </div>
     </div>

@@ -11,7 +11,8 @@
 }
 
 .review-cover {
-  max-width: 100%;
+  max-width: 350px;
+  max-height: 350px;
   height: auto;
   margin-bottom: 10px;
 }
@@ -56,4 +57,12 @@
   font-size: 1.2em;
   font-weight: bold;
   text-align: center; /* Adjust as needed for your layout */
+}
+
+.embedded-video-container {
+  width: auto; /* Set width to auto to take up the full width of its content */
+  max-width: auto; /* Set a maximum width to avoid stretching on larger screens */
+  height: auto; /* Let the height adjust automatically based on the aspect ratio */
+  margin: 0 auto; /* Center horizontally */
+  text-align: center; /* Center the inner content */
 }

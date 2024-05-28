@@ -78,6 +78,10 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::tag.tag"
+    },
+    "oembed": {
+      "type": "customField",
+      "customField": "plugin::oembed.oembed"
     }
   }
 }

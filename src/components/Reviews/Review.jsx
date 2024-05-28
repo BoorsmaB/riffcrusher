@@ -45,6 +45,10 @@ function Review() {
 
   console.log("Review tags:", review.tags); // Debugging line
 
+  // Parse oembed field and extract HTML code for embedding the video
+  const oembed = JSON.parse(review.oembed);
+  const videoHtml = oembed?.rawData?.html;
+
   return (
     <div className="review-container">
       <div className="home-container">
@@ -64,6 +68,15 @@ function Review() {
           )}
         </div>
         <MarkdownRenderer content={review.Review} />
+        {videoHtml && (
+          <div className="embedded-video-container">
+            <div
+              className="embedded-video"
+              dangerouslySetInnerHTML={{ __html: videoHtml }}
+              style={{ width: "100%", height: "100%" }} // Apply inline styles directly
+            />
+          </div>
+        )}
         <p className="review-rating">
           Rating: <span className="rating-value">{review.Rating}</span>
         </p>
