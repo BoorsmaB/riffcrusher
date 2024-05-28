@@ -34,6 +34,10 @@
   font-size: 1.5em;
 }
 
+.tags-title {
+  font-size: 1.5em;
+}
+
 .rating-value {
   font-weight: bold;
 }
@@ -50,6 +54,7 @@
 .banner-review {
   max-width: 100%;
   height: auto;
+  padding-top: 20px;
 }
 
 .review-author {

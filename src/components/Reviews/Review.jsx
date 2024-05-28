@@ -80,6 +80,7 @@ function Review() {
         <p className="review-rating">
           Rating: <span className="rating-value">{review.Rating}</span>
         </p>
+        <p className="tags-title">Tags:</p>
         {review.tags && <Tags tags={review.tags} />}
         {bannerReviewUrl && (
           <img
