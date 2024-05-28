@@ -1,3 +1,4 @@
+// src/Home/Home.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -52,9 +53,17 @@ function Home() {
         {recentAlbums.map((album) => {
           const albumCoverUrl =
             album.attributes.Albumcover?.data?.attributes?.url;
+          const cardStyle = {
+            backgroundColor: "rgb(210, 210, 210)",
+            color: "black",
+          };
           return (
-            <li key={album.id} className="album-card">
-              <Link to={`/review/${album.id}`} className="album-link">
+            <Link
+              to={`/review/${album.id}`}
+              className="album-link"
+              key={album.id}
+            >
+              <li className="album-card" style={cardStyle}>
                 {albumCoverUrl && (
                   <img
                     src={`http://localhost:1337${albumCoverUrl}`}
@@ -65,21 +74,17 @@ function Home() {
                 <div className="album-info">
                   <h3>{album.attributes.Title}</h3>
                   <h4>{album.attributes.Band}</h4>
-                  <ReactMarkdown
-                    components={{
-                      p: ({ node, ...props }) => (
-                        <p style={{ fontWeight: "normal" }} {...props} />
-                      ),
-                    }}
-                  >
-                    {`${album.attributes.Review.split(" ")
-                      .slice(0, 20)
-                      .join(" ")} ...`}
-                  </ReactMarkdown>
+                  <div className="review-preview">
+                    <ReactMarkdown>
+                      {`${album.attributes.Review.split(" ")
+                        .slice(0, 20)
+                        .join(" ")} ...`}
+                    </ReactMarkdown>
+                  </div>
                   <p className="read-more">Read more</p>
                 </div>
-              </Link>
-            </li>
+              </li>
+            </Link>
           );
         })}
       </ul>
