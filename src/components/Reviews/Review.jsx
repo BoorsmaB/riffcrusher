@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import MarkdownRenderer from "../MarkdownRenderer/MarkdownRenderer";
 import Tags from "./Tags"; // Ensure correct import
@@ -63,7 +63,11 @@ function Review() {
           <h2 className="review-title">{review.Title}</h2>
           {review.createdBy && (
             <p className="review-author">
-              Written by: {review.createdBy.data.attributes.username}
+              {/* Make author's name clickable and link to their profile */}
+              Written by:{" "}
+              <Link to={`/author/${review.createdBy.data.attributes.username}`}>
+                {review.createdBy.data.attributes.username}
+              </Link>
             </p>
           )}
         </div>

@@ -1,15 +1,15 @@
-.home-container {
+.author-profile-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.album-list {
+.review-list {
   list-style-type: none;
   padding: 0;
 }
 
-.album-card {
+.review-card {
   background-color: #d2d2d2;
   display: flex;
   align-items: center;
@@ -20,20 +20,21 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   color: black;
+  width: 100%;
 }
 
-.album-card:hover {
+.review-card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.album-link {
+.review-link {
   display: flex;
   width: 100%;
   text-decoration: none;
   color: inherit;
 }
 
-.album-link:hover {
+.review-link:hover {
   color: inherit;
 }
 
@@ -46,28 +47,28 @@
   filter: drop-shadow(0 0 10px rgb(0, 0, 0));
 }
 
-.album-info {
+.review-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.album-info h3 {
+.review-info h3 {
   margin: 0;
   font-size: 1.5em;
 }
 
-.album-info h4 {
+.review-info h4 {
   margin: 10px 0 5px;
   font-size: 1.2em;
   color: #555;
 }
 
-.album-info p {
+.review-info p {
   margin: 0;
 }
 
-.preview-text {
+.review-preview {
   font-weight: normal;
 }
 
@@ -81,7 +82,7 @@
 }
 
 @media (max-width: 768px) {
-  .album-card {
+  .review-card {
     flex-direction: column;
   }
 
@@ -90,7 +91,7 @@
     margin-bottom: 10px;
   }
 
-  .album-info {
+  .review-info {
     text-align: center;
   }
 }

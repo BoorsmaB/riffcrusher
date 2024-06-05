@@ -6,6 +6,7 @@ import Review from "./components/Reviews/Review";
 import Home from "./components/Home/Home";
 import AboutMe from "./components/AboutMe/AboutMe";
 import Contact from "./components/Contact/Contact";
+import AuthorProfile from "./components/AuthorProfile/AuthorProfile"; // Import AuthorProfile component
 import "./ui/globalStyles.css";
 import "./App.css";
 
@@ -19,6 +20,8 @@ function App() {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/review/:id" element={<Review />} />
         <Route path="/contact" element={<Contact />} />
+        {/* Route for author profile */}
+        <Route path="/author/:username" element={<AuthorProfile />} />
       </Routes>
     </Router>
   );

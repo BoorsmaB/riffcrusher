@@ -49,7 +49,10 @@ function Contact() {
   return (
     <div className="contacts-container">
       <h1>Contact</h1>
-      <p>Do you have a question? Or do you want to write for us?</p>
+      <p>
+        Do you have a question? A suggestion? Or perhaps you want to write for
+        us?
+      </p>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
