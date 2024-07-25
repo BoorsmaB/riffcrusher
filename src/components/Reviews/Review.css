@@ -39,7 +39,7 @@
 }
 
 .rating-value {
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 .review-image-container {
@@ -70,4 +70,48 @@
   height: auto; /* Let the height adjust automatically based on the aspect ratio */
   margin: 0 auto; /* Center horizontally */
   text-align: center; /* Center the inner content */
+}
+
+.your-rating-title {
+  font-size: 1.5em;
+}
+
+.response-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.response-buttons button {
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+  background-color: #d2d2d2;
+  color: black;
+  font-weight: bold;
+  font-size: 1.5em;
+  border: none;
+}
+
+.good-button:hover {
+  background-color: #33cc33;
+}
+
+.okay-button:hover {
+  background-color: #ffff33;
+}
+
+.bad-button:hover {
+  background-color: #ff4d4d;
+}
+
+.selected {
+  background-color: #33cc33 !important; /* Green for Good */
+}
+
+.selected.okay-button {
+  background-color: #ffff33 !important; /* Yellow for Okay */
+}
+
+.selected.bad-button {
+  background-color: #ff4d4d !important; /* Red for Bad */
 }

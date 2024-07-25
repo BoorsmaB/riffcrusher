@@ -406,7 +406,6 @@ export interface ApiMetalreviewMetalreview extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: true;
-    populateCreatorFields: true;
   };
   pluginOptions: {
     i18n: {
@@ -456,17 +455,38 @@ export interface ApiMetalreviewMetalreview extends Schema.CollectionType {
           localized: true;
         };
       }>;
-    author: Attribute.Relation<
-      'api::metalreview.metalreview',
-      'oneToOne',
-      'admin::user'
-    >;
     tags: Attribute.Relation<
       'api::metalreview.metalreview',
       'oneToMany',
       'api::tag.tag'
     >;
     oembed: Attribute.Text & Attribute.CustomField<'plugin::oembed.oembed'>;
+    Good: Attribute.Integer &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Attribute.DefaultTo<0>;
+    Okay: Attribute.Integer &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Attribute.DefaultTo<0>;
+    Bad: Attribute.Integer &
+      Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Attribute.DefaultTo<0>;
+    Writer: Attribute.Relation<
+      'api::metalreview.metalreview',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -474,12 +494,14 @@ export interface ApiMetalreviewMetalreview extends Schema.CollectionType {
       'api::metalreview.metalreview',
       'oneToOne',
       'admin::user'
-    >;
+    > &
+      Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::metalreview.metalreview',
       'oneToOne',
       'admin::user'
-    >;
+    > &
+      Attribute.Private;
     localizations: Attribute.Relation<
       'api::metalreview.metalreview',
       'oneToMany',

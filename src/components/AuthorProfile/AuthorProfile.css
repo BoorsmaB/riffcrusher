@@ -75,6 +75,7 @@
 .read-more {
   margin-top: 10px;
   color: black;
+  font-weight: bold;
 }
 
 .read-more:hover {

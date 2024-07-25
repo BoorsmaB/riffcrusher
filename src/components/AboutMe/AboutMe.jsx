@@ -17,13 +17,16 @@ function AboutMe() {
         <div className="aboutme-text">
           <p>
             Hi there. I go by Jovanaar, but you might also know me as "Waanzin"
-            from the Blackened-Death metal band "Onheil". I've started this
-            website because I wanted to combine my passion for creating metal
-            music, content creation and all my other hobbies.{" "}
+            from the Blackened-Death metal band "Onheil".
+          </p>
+          <p>
+            {" "}
+            I've started this website because I wanted to combine my passion for
+            creating metal music, content creation and all my other hobbies.{" "}
           </p>
           <p>
             I wanted a space where I could do whatever I want and since
-            finishing my Front-End Developing studies I've got the tools to do
+            finishing my Front-End Developing studies, I've got the tools to do
             this myself as well.
           </p>{" "}
           <p>
@@ -31,9 +34,63 @@ function AboutMe() {
             community-driven platform bringing everyone together who enjoys loud
             music, scary movies, and video games.
           </p>
-          <a href="https://www.twitch.tv/ItsJovanaar">
-            https://www.twitch.tv/ItsJovanaar
-          </a>
+          <div className="social-buttons">
+            <a
+              href="https://www.twitch.tv/ItsJovanaar"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="/assets/twitch.png"
+                alt="Twitch"
+                className="social-icon"
+              />
+            </a>
+            <a
+              href="https://www.youtube.com/@ItsJovanaar"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="/assets/youtube.png"
+                alt="YouTube"
+                className="social-icon"
+              />
+            </a>
+            <a
+              href="https://www.facebook.com/ItsJovanaar"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="/assets/facebook.png"
+                alt="Facebook"
+                className="social-icon"
+              />
+            </a>
+            <a
+              href="https://www.instagram.com/itsjovanaar/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="/assets/instagram.png"
+                alt="Instagram"
+                className="social-icon"
+              />
+            </a>
+            <a
+              href="https://www.tiktok.com/@itsjovanaar"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="/assets/tiktok.png"
+                alt="TikTok"
+                className="social-icon"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>

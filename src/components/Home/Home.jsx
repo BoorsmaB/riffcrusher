@@ -48,8 +48,10 @@ function Home() {
       <h2>Welcome to Jovanaar Reviews</h2>
       <p>Check out the latest reviews of the newest metal records worldwide.</p>
       <p>
-        We are currently looking for new reviewers! Quickly go to our{" "}
-        <b>Contact</b> page and send us your information.
+        <u>
+          We are currently looking for new reviewers! Quickly go to our{" "}
+          <b>Contact</b> page and send us your information.
+        </u>
       </p>
       <h2>Recent Reviewed Albums</h2>
       <ul className="album-list">
