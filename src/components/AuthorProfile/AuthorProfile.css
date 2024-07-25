@@ -2,6 +2,8 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  border-left: rgb(151, 22, 22) 3px solid;
+  border-right: rgb(151, 22, 22) 3px solid;
 }
 
 .review-list {

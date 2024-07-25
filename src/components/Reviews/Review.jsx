@@ -128,7 +128,7 @@ function Review() {
           </div>
         )}
         <p className="review-rating">
-          Rating: <span className="rating-value">{review.Rating}</span>
+          Our Rating: <span className="rating-value">{review.Rating}</span>
         </p>
         <div className="your-rating-section">
           <p className="your-rating-title">Your Rating:</p>
