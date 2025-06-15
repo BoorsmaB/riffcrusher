@@ -42,8 +42,9 @@ function Reviews() {
   }
 
   const filteredAlbums = reviewedAlbums.filter((album) => {
-    const albumTitle =
-      `${album.attributes.Band} - ${album.attributes.Title}`.toLowerCase();
+    const band = album.attributes?.Band || "";
+    const title = album.attributes?.Title || "";
+    const albumTitle = `${band} - ${title}`.toLowerCase();
     return albumTitle.includes(searchQuery.toLowerCase());
   });
 
@@ -54,11 +55,15 @@ function Reviews() {
       <ul className="album-list">
         {filteredAlbums.map((album) => {
           const albumCoverUrl =
-            album.attributes.Albumcover?.data?.attributes?.url;
+            album.attributes?.Albumcover?.data?.attributes?.url || null;
           const cardStyle = {
             backgroundColor: "rgb(210, 210, 210)",
             color: "black",
           };
+          // Safely get review preview text, avoid error if Review is missing
+          const reviewText = album.attributes?.Review || "";
+          const preview = reviewText.split(" ").slice(0, 20).join(" ");
+
           return (
             <Link
               to={`/review/${album.id}`}
@@ -69,19 +74,15 @@ function Reviews() {
                 {albumCoverUrl && (
                   <img
                     src={`${API_BASE_URL}${albumCoverUrl}`}
-                    alt={album.attributes.Title}
+                    alt={album.attributes?.Title || "Album Cover"}
                     className="album-cover"
                   />
                 )}
                 <div className="album-info">
-                  <h3>{album.attributes.Title}</h3>
-                  <h4>{album.attributes.Band}</h4>
+                  <h3>{album.attributes?.Title || "Unknown Title"}</h3>
+                  <h4>{album.attributes?.Band || "Unknown Band"}</h4>
                   <div className="review-preview">
-                    <ReactMarkdown>
-                      {`${album.attributes.Review.split(" ")
-                        .slice(0, 20)
-                        .join(" ")} ...`}
-                    </ReactMarkdown>
+                    <ReactMarkdown>{`${preview} ...`}</ReactMarkdown>
                   </div>
                   <p className="read-more">Read more</p>
                 </div>

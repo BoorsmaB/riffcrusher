@@ -8,7 +8,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
 function Home() {
-  const [recentAlbums, setRecentAlbums] = useState([]);
+  const [recentAlbums, setRecentAlbums] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,11 +57,16 @@ function Home() {
       <ul className="album-list">
         {recentAlbums.map((album) => {
           const albumCoverUrl =
-            album.attributes.Albumcover?.data?.attributes?.url;
+            album.attributes?.Albumcover?.data?.attributes?.url || null;
           const cardStyle = {
             backgroundColor: "rgb(210, 210, 210)",
             color: "black",
           };
+
+          // Safely handle Review text
+          const reviewText = album.attributes?.Review || "";
+          const preview = reviewText.split(" ").slice(0, 20).join(" ");
+
           return (
             <Link
               to={`/review/${album.id}`}
@@ -72,19 +77,15 @@ function Home() {
                 {albumCoverUrl && (
                   <img
                     src={`${API_BASE_URL}${albumCoverUrl}`}
-                    alt={album.attributes.Title}
+                    alt={album.attributes?.Title || "Album Cover"}
                     className="album-cover"
                   />
                 )}
                 <div className="album-info">
-                  <h3>{album.attributes.Title}</h3>
-                  <h4>{album.attributes.Band}</h4>
+                  <h3>{album.attributes?.Title || "Unknown Title"}</h3>
+                  <h4>{album.attributes?.Band || "Unknown Band"}</h4>
                   <div className="review-preview">
-                    <ReactMarkdown>
-                      {`${album.attributes.Review.split(" ")
-                        .slice(0, 20)
-                        .join(" ")} ...`}
-                    </ReactMarkdown>
+                    <ReactMarkdown>{`${preview} ...`}</ReactMarkdown>
                   </div>
                   <p className="read-more">Read more</p>
                 </div>

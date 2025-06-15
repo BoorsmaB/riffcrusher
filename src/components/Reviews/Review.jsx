@@ -38,9 +38,11 @@ function Review() {
             "Review data not found in the response:",
             response.data
           );
+          setReview(null); // Clear review on error
         }
       } catch (error) {
         console.error("Error fetching review:", error);
+        setReview(null);
       }
     };
 
@@ -51,38 +53,38 @@ function Review() {
     if (!review || selectedButton === type) return;
 
     try {
-      let newCount = review[type] ? review[type] + 1 : 1;
+      // Calculate new counts locally before updating
+      let newReview = { ...review };
 
-      // Remove previous vote if any
       const previousVote = localStorage.getItem(`review_${id}`);
-      if (previousVote && previousVote !== type) {
-        const previousCount = review[previousVote]
-          ? review[previousVote] - 1
-          : 0;
-        newCount = review[type] ? review[type] + 1 : 1;
 
-        // Update the review state and local storage with the new counts
-        setReview((prevReview) => ({
-          ...prevReview,
-          [previousVote]: previousCount,
-          [type]: newCount,
-        }));
-      } else {
-        // Just increment the count if no previous vote
-        newCount = review[type] ? review[type] + 1 : 1;
-        setReview((prevReview) => ({
-          ...prevReview,
-          [type]: newCount,
-        }));
+      // Decrement previous vote count if exists and different
+      if (previousVote && previousVote !== type) {
+        newReview[previousVote] = newReview[previousVote]
+          ? Math.max(newReview[previousVote] - 1, 0)
+          : 0;
       }
 
+      // Increment current vote count
+      newReview[type] = newReview[type] ? newReview[type] + 1 : 1;
+
+      // Optimistically update UI state
+      setReview(newReview);
+
+      // Update backend with new counts for both votes if changed
+      const updateData =
+        previousVote && previousVote !== type
+          ? {
+              [previousVote]: newReview[previousVote],
+              [type]: newReview[type],
+            }
+          : { [type]: newReview[type] };
+
       await axios.put(`${API_BASE_URL}/api/metal-reviews/${id}`, {
-        data: {
-          [type]: newCount,
-        },
+        data: updateData,
       });
 
-      // Update local storage with the new vote
+      // Save current vote locally
       localStorage.setItem(`review_${id}`, type);
       setSelectedButton(type);
     } catch (error) {
@@ -94,12 +96,18 @@ function Review() {
     return <div>Loading review...</div>;
   }
 
+  // Use safer optional chaining everywhere
   const albumCoverUrl = review.Albumcover?.data?.attributes?.url;
   const bannerReviewUrl = review.BannerReview?.data?.attributes?.url;
 
-  // Parse oembed field and extract HTML code for embedding the video
-  const oembed = JSON.parse(review.oembed);
-  const videoHtml = oembed?.rawData?.html;
+  // Parse oembed safely
+  let videoHtml = null;
+  try {
+    const oembed = JSON.parse(review.oembed);
+    videoHtml = oembed?.rawData?.html || null;
+  } catch (e) {
+    console.warn("Failed to parse oembed JSON:", e);
+  }
 
   return (
     <div className="review-container">
@@ -113,7 +121,7 @@ function Review() {
             />
           )}
           <h2 className="review-title">{review.Title}</h2>
-          {review.Writer && (
+          {review.Writer?.data?.attributes && (
             <Link to={`/author/${review.Writer.data.attributes.username}`}>
               <Author author={review.Writer.data.attributes} />
             </Link>
