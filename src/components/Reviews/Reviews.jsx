@@ -16,7 +16,7 @@ function Reviews() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/metal-reviews?populate=Albumcover`,
+          `${API_BASE_URL}/api/metal-reviews?populate=*`,
           {
             headers: {
               Authorization: `Bearer ${API_TOKEN}`,
@@ -42,8 +42,8 @@ function Reviews() {
   }
 
   const filteredAlbums = reviewedAlbums.filter((album) => {
-    const band = album.attributes?.Band || "";
-    const title = album.attributes?.Title || "";
+    const band = album.Band || "";
+    const title = album.Title || "";
     const albumTitle = `${band} - ${title}`.toLowerCase();
     return albumTitle.includes(searchQuery.toLowerCase());
   });
@@ -54,14 +54,12 @@ function Reviews() {
       <h2>All Albums</h2>
       <ul className="album-list">
         {filteredAlbums.map((album) => {
-          const albumCoverUrl =
-            album.attributes?.Albumcover?.data?.attributes?.url || null;
+          const albumCoverUrl = album.Albumcover?.url || null;
           const cardStyle = {
             backgroundColor: "rgb(210, 210, 210)",
             color: "black",
           };
-          // Safely get review preview text, avoid error if Review is missing
-          const reviewText = album.attributes?.Review || "";
+          const reviewText = album.Review || "";
           const preview = reviewText.split(" ").slice(0, 20).join(" ");
 
           return (
@@ -74,13 +72,13 @@ function Reviews() {
                 {albumCoverUrl && (
                   <img
                     src={`${API_BASE_URL}${albumCoverUrl}`}
-                    alt={album.attributes?.Title || "Album Cover"}
+                    alt={album.Title || "Album Cover"}
                     className="album-cover"
                   />
                 )}
                 <div className="album-info">
-                  <h3>{album.attributes?.Title || "Unknown Title"}</h3>
-                  <h4>{album.attributes?.Band || "Unknown Band"}</h4>
+                  <h3>{album.Title || "Unknown Title"}</h3>
+                  <h4>{album.Band || "Unknown Band"}</h4>
                   <div className="review-preview">
                     <ReactMarkdown>{`${preview} ...`}</ReactMarkdown>
                   </div>
