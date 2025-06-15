@@ -6,6 +6,8 @@ import Tags from "./Tags"; // Ensure correct import
 import "./Review.css";
 import Author from "./Author";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 function Review() {
   const { id } = useParams();
   const [review, setReview] = useState(null);
@@ -15,7 +17,7 @@ function Review() {
     const fetchReview = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:1337/api/metalreviews/${id}?populate=Albumcover,BannerReview,tags,Writer`
+          `${API_BASE_URL}/api/metalreviews/${id}?populate=Albumcover,BannerReview,tags,Writer`
         );
         console.log("Full response data:", response.data);
 
@@ -74,7 +76,7 @@ function Review() {
         }));
       }
 
-      await axios.put(`http://localhost:1337/api/metalreviews/${id}`, {
+      await axios.put(`${API_BASE_URL}/api/metalreviews/${id}`, {
         data: {
           [type]: newCount,
         },
@@ -105,7 +107,7 @@ function Review() {
         <div className="review-header">
           {albumCoverUrl && (
             <img
-              src={`http://localhost:1337${albumCoverUrl}`}
+              src={`${API_BASE_URL}${albumCoverUrl}`}
               alt="Album Cover"
               className="review-cover"
             />
@@ -123,7 +125,7 @@ function Review() {
             <div
               className="embedded-video"
               dangerouslySetInnerHTML={{ __html: videoHtml }}
-              style={{ width: "100%", height: "100%" }} // Apply inline styles directly
+              style={{ width: "100%", height: "100%" }}
             />
           </div>
         )}
@@ -163,7 +165,7 @@ function Review() {
         {review.tags && <Tags tags={review.tags} />}
         {bannerReviewUrl && (
           <img
-            src={`http://localhost:1337${bannerReviewUrl}`}
+            src={`${API_BASE_URL}${bannerReviewUrl}`}
             alt="Banner Review"
             className="banner-review"
           />
