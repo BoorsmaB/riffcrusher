@@ -17,7 +17,7 @@ function Review() {
     const fetchReview = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/metalreviews/${id}?populate=Albumcover,BannerReview,tags,Writer`
+          `${API_BASE_URL}/api/metal-reviews/${id}?populate=Albumcover,BannerReview,tags,Writer`
         );
         console.log("Full response data:", response.data);
 
@@ -76,7 +76,7 @@ function Review() {
         }));
       }
 
-      await axios.put(`${API_BASE_URL}/api/metalreviews/${id}`, {
+      await axios.put(`${API_BASE_URL}/api/metal-reviews/${id}`, {
         data: {
           [type]: newCount,
         },

@@ -14,7 +14,7 @@ function Home() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/metalreviews?_limit=10&_sort=publishedAt:DESC&populate=Albumcover`,
+          `${API_BASE_URL}/api/metal-reviews?_limit=10&_sort=publishedAt:DESC&populate=Albumcover`,
           {
             headers: {
               Authorization: `Bearer ${API_TOKEN}`,
