@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import MarkdownRenderer from "../MarkdownRenderer/MarkdownRenderer";
-import Tags from "./Tags"; // Ensure correct import
+import Tags from "./Tags";
 import "./Review.css";
 import Author from "./Author";
 
@@ -17,16 +17,12 @@ function Review() {
     const fetchReview = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/metal-reviews/${id}?populate=Albumcover,BannerReview,tags,Writer`
+          `${API_BASE_URL}/api/metal-reviews/${id}?populate=*`
         );
         console.log("Full response data:", response.data);
 
-        if (
-          response.data &&
-          response.data.data &&
-          response.data.data.attributes
-        ) {
-          setReview(response.data.data.attributes);
+        if (response.data && response.data.data) {
+          setReview(response.data.data);
 
           const localStorageKey = `review_${id}`;
           const hasVoted = localStorage.getItem(localStorageKey);
@@ -34,11 +30,8 @@ function Review() {
             setSelectedButton(hasVoted);
           }
         } else {
-          console.error(
-            "Review data not found in the response:",
-            response.data
-          );
-          setReview(null); // Clear review on error
+          console.error("Review data not found:", response.data);
+          setReview(null);
         }
       } catch (error) {
         console.error("Error fetching review:", error);
@@ -53,38 +46,33 @@ function Review() {
     if (!review || selectedButton === type) return;
 
     try {
-      // Calculate new counts locally before updating
-      let newReview = { ...review };
+      const updatedReview = { ...review };
 
       const previousVote = localStorage.getItem(`review_${id}`);
-
-      // Decrement previous vote count if exists and different
       if (previousVote && previousVote !== type) {
-        newReview[previousVote] = newReview[previousVote]
-          ? Math.max(newReview[previousVote] - 1, 0)
-          : 0;
+        updatedReview.attributes[previousVote] = Math.max(
+          (updatedReview.attributes[previousVote] || 0) - 1,
+          0
+        );
       }
 
-      // Increment current vote count
-      newReview[type] = newReview[type] ? newReview[type] + 1 : 1;
+      updatedReview.attributes[type] =
+        (updatedReview.attributes[type] || 0) + 1;
 
-      // Optimistically update UI state
-      setReview(newReview);
+      setReview(updatedReview);
 
-      // Update backend with new counts for both votes if changed
       const updateData =
         previousVote && previousVote !== type
           ? {
-              [previousVote]: newReview[previousVote],
-              [type]: newReview[type],
+              [previousVote]: updatedReview.attributes[previousVote],
+              [type]: updatedReview.attributes[type],
             }
-          : { [type]: newReview[type] };
+          : { [type]: updatedReview.attributes[type] };
 
       await axios.put(`${API_BASE_URL}/api/metal-reviews/${id}`, {
         data: updateData,
       });
 
-      // Save current vote locally
       localStorage.setItem(`review_${id}`, type);
       setSelectedButton(type);
     } catch (error) {
@@ -92,18 +80,15 @@ function Review() {
     }
   };
 
-  if (!review) {
-    return <div>Loading review...</div>;
-  }
+  if (!review) return <div>Loading review...</div>;
 
-  // Use safer optional chaining everywhere
-  const albumCoverUrl = review.Albumcover?.data?.attributes?.url;
-  const bannerReviewUrl = review.BannerReview?.data?.attributes?.url;
+  const attrs = review; // no .attributes layer
+  const albumCoverUrl = attrs.Albumcover?.url;
+  const bannerReviewUrl = attrs.BannerReview?.url;
 
-  // Parse oembed safely
   let videoHtml = null;
   try {
-    const oembed = JSON.parse(review.oembed);
+    const oembed = JSON.parse(attrs.oembed || "{}");
     videoHtml = oembed?.rawData?.html || null;
   } catch (e) {
     console.warn("Failed to parse oembed JSON:", e);
@@ -120,14 +105,16 @@ function Review() {
               className="review-cover"
             />
           )}
-          <h2 className="review-title">{review.Title}</h2>
-          {review.Writer?.data?.attributes && (
-            <Link to={`/author/${review.Writer.data.attributes.username}`}>
-              <Author author={review.Writer.data.attributes} />
+          <h2 className="review-title">{attrs.Title}</h2>
+          {attrs.Writer && (
+            <Link to={`/author/${attrs.Writer.username}`}>
+              <Author author={attrs.Writer} />
             </Link>
           )}
         </div>
-        <MarkdownRenderer content={review.Review} />
+
+        <MarkdownRenderer content={attrs.Review} />
+
         {videoHtml && (
           <div className="embedded-video-container">
             <div
@@ -137,40 +124,31 @@ function Review() {
             />
           </div>
         )}
+
         <p className="review-rating">
-          Our Rating: <span className="rating-value">{review.Rating}</span>
+          Our Rating: <span className="rating-value">{attrs.Rating}</span>
         </p>
+
         <div className="your-rating-section">
           <p className="your-rating-title">Your Rating:</p>
           <div className="response-buttons">
-            <button
-              className={`good-button ${
-                selectedButton === "Good" ? "selected" : ""
-              }`}
-              onClick={() => handleButtonClick("Good")}
-            >
-              Good ({review.Good || 0})
-            </button>
-            <button
-              className={`okay-button ${
-                selectedButton === "Okay" ? "selected" : ""
-              }`}
-              onClick={() => handleButtonClick("Okay")}
-            >
-              Okay ({review.Okay || 0})
-            </button>
-            <button
-              className={`bad-button ${
-                selectedButton === "Bad" ? "selected" : ""
-              }`}
-              onClick={() => handleButtonClick("Bad")}
-            >
-              Bad ({review.Bad || 0})
-            </button>
+            {["Good", "Okay", "Bad"].map((type) => (
+              <button
+                key={type}
+                className={`${type.toLowerCase()}-button ${
+                  selectedButton === type ? "selected" : ""
+                }`}
+                onClick={() => handleButtonClick(type)}
+              >
+                {type} ({attrs[type] || 0})
+              </button>
+            ))}
           </div>
         </div>
+
         <p className="tags-title">Tags:</p>
-        {review.tags && <Tags tags={review.tags} />}
+        {attrs.tags && <Tags tags={attrs.tags} />}
+
         {bannerReviewUrl && (
           <img
             src={`${API_BASE_URL}${bannerReviewUrl}`}
