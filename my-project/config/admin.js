@@ -1,13 +1,13 @@
 module.exports = ({ env }) => ({
   auth: {
-    secret: env("69a9943b27fa7bce16a46e4a3a74ebc5"),
+    secret: "69a9943b27fa7bce16a46e4a3a74ebc5",
   },
   apiToken: {
-    salt: env("f42708cf80e173da37366ec1bf041778"),
+    salt: env("API_TOKEN_SALT", "f42708cf80e173da37366ec1bf041778"),
   },
   transfer: {
     token: {
-      salt: env("3cd1960c74399afc13e2f84d8fb6f6cb"),
+      salt: env("TRANSFER_TOKEN_SALT", "3cd1960c74399afc13e2f84d8fb6f6cb"),
     },
   },
   flags: {
