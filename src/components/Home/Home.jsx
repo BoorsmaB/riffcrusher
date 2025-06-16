@@ -81,6 +81,11 @@ function Home() {
                   color: "black",
                 }}
               >
+                <div className="album-header">
+                  <h3 className="album-title">
+                    {band} - {title}
+                  </h3>
+                </div>
                 {albumCoverUrl && (
                   <img
                     src={`${API_BASE_URL}${albumCoverUrl}`}
@@ -92,9 +97,6 @@ function Home() {
                   />
                 )}
                 <div className="album-info">
-                  <h3 className="album-title">
-                    {band} - {title}
-                  </h3>
                   {reviewText && (
                     <>
                       <div className="review-preview">

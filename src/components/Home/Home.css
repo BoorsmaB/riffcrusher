@@ -21,19 +21,28 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   color: black;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-gap: 16px;
   min-height: 120px;
 }
 
+.album-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
 .album-header {
-  margin-bottom: 4px;
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-bottom: 8px;
 }
 
 .album-title {
   margin: 0;
   font-size: 1.2em;
+  font-weight: bold;
+  color: #222;
 }
 
 .album-header h4 {
@@ -49,13 +58,14 @@
   object-fit: cover;
   border-radius: 6px;
   filter: drop-shadow(0 0 5px rgb(0, 0, 0));
-  flex-shrink: 0;
+  align-self: start;
 }
 
 .album-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  align-self: start;
   flex: 1;
 }
 
@@ -63,12 +73,15 @@
   font-size: 0.95em;
   color: #222;
   line-height: 1.4em;
+  margin-top: 0;
 }
 
 .read-more {
   margin-top: 6px;
   font-weight: 600;
   color: black;
+  text-decoration: underline;
+  align-self: flex-start;
 }
 
 .read-more:hover {
@@ -98,6 +111,7 @@
 
   .album-header {
     grid-row: 1;
+    grid-column: 1;
   }
 
   .album-cover {
@@ -127,5 +141,6 @@
 
   .read-more {
     font-size: 0.85em;
+    align-self: center;
   }
 }
