@@ -22,14 +22,11 @@ function Home() {
           }
         );
         if (response.data && response.data.data) {
-          // Flatten album data if returned inside .attributes
-          const albums = response.data.data.map((item) => {
-            return {
-              id: item.id,
-              documentId: item.documentId,
-              ...item, // Keep top-level fields like Title, Band, Albumcover
-            };
-          });
+          const albums = response.data.data.map((item) => ({
+            id: item.id,
+            documentId: item.documentId,
+            ...item,
+          }));
           setRecentAlbums(albums);
         } else {
           console.error(
@@ -95,18 +92,21 @@ function Home() {
                   />
                 )}
                 <div className="album-info">
-                  <h3>{title}</h3>
-                  <h4>{band}</h4>
+                  <h3 className="album-title">
+                    {band} - {title}
+                  </h3>
                   {reviewText && (
-                    <div className="review-preview">
-                      <ReactMarkdown>
-                        {`${preview}${
-                          reviewText.split(" ").length > 20 ? " ..." : ""
-                        }`}
-                      </ReactMarkdown>
-                    </div>
+                    <>
+                      <div className="review-preview">
+                        <ReactMarkdown>
+                          {`${preview}${
+                            reviewText.split(" ").length > 20 ? " ..." : ""
+                          }`}
+                        </ReactMarkdown>
+                      </div>
+                      <p className="read-more">Read more</p>
+                    </>
                   )}
-                  <p className="read-more">Read more</p>
                 </div>
               </li>
             </Link>
