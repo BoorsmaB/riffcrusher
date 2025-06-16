@@ -20,7 +20,7 @@ function Review() {
         console.log("useParams ID:", id);
 
         const response = await axios.get(
-          `${API_BASE_URL}/api/metal-reviews/${id}?populate=Albumcover,BannerReview,tags,Writer`,
+          `${API_BASE_URL}/api/metal-reviews/${id}?populate[Albumcover]=*&populate[BannerReview]=*&populate[tags]=*&populate[Writer]=*`,
           API_TOKEN
             ? {
                 headers: {
