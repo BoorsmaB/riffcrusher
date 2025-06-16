@@ -7,6 +7,7 @@ import "./Review.css";
 import Author from "./Author";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
 function Review() {
   const { id } = useParams();
@@ -16,12 +17,24 @@ function Review() {
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/api/metal-reviews/${id}?populate=*`
-        );
-        console.log("Full response data:", response.data);
+        console.log("useParams ID:", id);
 
-        if (response.data && response.data.data) {
+        const response = await axios.get(
+          `${API_BASE_URL}/api/metal-reviews/${id}?populate=Albumcover,BannerReview,tags,Writer`,
+          API_TOKEN
+            ? {
+                headers: {
+                  Authorization: `Bearer ${API_TOKEN}`,
+                },
+              }
+            : {}
+        );
+
+        console.log("Full response data:", response.data);
+        console.log("Review object:", response.data?.data);
+        console.log("Attributes:", response.data?.data?.attributes);
+
+        if (response.data?.data) {
           setReview(response.data.data);
 
           const localStorageKey = `review_${id}`;
@@ -30,12 +43,10 @@ function Review() {
             setSelectedButton(hasVoted);
           }
         } else {
-          console.error("Review data not found:", response.data);
-          setReview(null);
+          console.error("Review data not found in the response.");
         }
       } catch (error) {
         console.error("Error fetching review:", error);
-        setReview(null);
       }
     };
 
@@ -45,33 +56,50 @@ function Review() {
   const handleButtonClick = async (type) => {
     if (!review || selectedButton === type) return;
 
+    const currentData = review.attributes;
+
     try {
-      const updatedReview = { ...review };
+      let newCount = currentData[type] ? currentData[type] + 1 : 1;
 
       const previousVote = localStorage.getItem(`review_${id}`);
       if (previousVote && previousVote !== type) {
-        updatedReview.attributes[previousVote] = Math.max(
-          (updatedReview.attributes[previousVote] || 0) - 1,
-          0
-        );
+        const previousCount = currentData[previousVote]
+          ? currentData[previousVote] - 1
+          : 0;
+
+        setReview((prev) => ({
+          ...prev,
+          attributes: {
+            ...prev.attributes,
+            [previousVote]: previousCount,
+            [type]: newCount,
+          },
+        }));
+      } else {
+        setReview((prev) => ({
+          ...prev,
+          attributes: {
+            ...prev.attributes,
+            [type]: newCount,
+          },
+        }));
       }
 
-      updatedReview.attributes[type] =
-        (updatedReview.attributes[type] || 0) + 1;
-
-      setReview(updatedReview);
-
-      const updateData =
-        previousVote && previousVote !== type
+      await axios.put(
+        `${API_BASE_URL}/api/metal-reviews/${id}`,
+        {
+          data: {
+            [type]: newCount,
+          },
+        },
+        API_TOKEN
           ? {
-              [previousVote]: updatedReview.attributes[previousVote],
-              [type]: updatedReview.attributes[type],
+              headers: {
+                Authorization: `Bearer ${API_TOKEN}`,
+              },
             }
-          : { [type]: updatedReview.attributes[type] };
-
-      await axios.put(`${API_BASE_URL}/api/metal-reviews/${id}`, {
-        data: updateData,
-      });
+          : {}
+      );
 
       localStorage.setItem(`review_${id}`, type);
       setSelectedButton(type);
@@ -82,17 +110,13 @@ function Review() {
 
   if (!review) return <div>Loading review...</div>;
 
-  const attrs = review; // no .attributes layer
-  const albumCoverUrl = attrs.Albumcover?.url;
-  const bannerReviewUrl = attrs.BannerReview?.url;
+  const attrs = review.attributes || {};
+  const albumCoverUrl = attrs.Albumcover?.data?.attributes?.url;
+  const bannerReviewUrl = attrs.BannerReview?.data?.attributes?.url;
+  const writer = attrs.Writer?.data?.attributes;
 
-  let videoHtml = null;
-  try {
-    const oembed = JSON.parse(attrs.oembed || "{}");
-    videoHtml = oembed?.rawData?.html || null;
-  } catch (e) {
-    console.warn("Failed to parse oembed JSON:", e);
-  }
+  const oembed = attrs.oembed ? JSON.parse(attrs.oembed) : null;
+  const videoHtml = oembed?.rawData?.html;
 
   return (
     <div className="review-container">
@@ -101,19 +125,23 @@ function Review() {
           {albumCoverUrl && (
             <img
               src={`${API_BASE_URL}${albumCoverUrl}`}
-              alt="Album Cover"
+              alt={attrs.Title || "Album Cover"}
               className="review-cover"
             />
           )}
-          <h2 className="review-title">{attrs.Title}</h2>
-          {attrs.Writer && (
-            <Link to={`/author/${attrs.Writer.username}`}>
-              <Author author={attrs.Writer} />
+          <h2 className="review-title">{attrs.Title || "Untitled"}</h2>
+          <h4>{attrs.Band || "Unknown Band"}</h4>
+
+          {writer && (
+            <Link to={`/author/${writer.username}`}>
+              <Author author={writer} />
             </Link>
           )}
         </div>
 
-        <MarkdownRenderer content={attrs.Review} />
+        <MarkdownRenderer
+          content={attrs.Review || "No review content available."}
+        />
 
         {videoHtml && (
           <div className="embedded-video-container">
@@ -126,28 +154,42 @@ function Review() {
         )}
 
         <p className="review-rating">
-          Our Rating: <span className="rating-value">{attrs.Rating}</span>
+          Our Rating:{" "}
+          <span className="rating-value">{attrs.Rating || "N/A"}</span>
         </p>
 
         <div className="your-rating-section">
           <p className="your-rating-title">Your Rating:</p>
           <div className="response-buttons">
-            {["Good", "Okay", "Bad"].map((type) => (
-              <button
-                key={type}
-                className={`${type.toLowerCase()}-button ${
-                  selectedButton === type ? "selected" : ""
-                }`}
-                onClick={() => handleButtonClick(type)}
-              >
-                {type} ({attrs[type] || 0})
-              </button>
-            ))}
+            <button
+              className={`good-button ${
+                selectedButton === "Good" ? "selected" : ""
+              }`}
+              onClick={() => handleButtonClick("Good")}
+            >
+              Good ({attrs.Good || 0})
+            </button>
+            <button
+              className={`okay-button ${
+                selectedButton === "Okay" ? "selected" : ""
+              }`}
+              onClick={() => handleButtonClick("Okay")}
+            >
+              Okay ({attrs.Okay || 0})
+            </button>
+            <button
+              className={`bad-button ${
+                selectedButton === "Bad" ? "selected" : ""
+              }`}
+              onClick={() => handleButtonClick("Bad")}
+            >
+              Bad ({attrs.Bad || 0})
+            </button>
           </div>
         </div>
 
         <p className="tags-title">Tags:</p>
-        {attrs.tags && <Tags tags={attrs.tags} />}
+        {attrs.tags ? <Tags tags={attrs.tags} /> : <p>No tags available.</p>}
 
         {bannerReviewUrl && (
           <img
