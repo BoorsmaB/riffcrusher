@@ -83,25 +83,28 @@ function Reviews() {
                     <h3>{album.Title || "Unknown Title"}</h3>
                     <h4>{album.Band || "Unknown Band"}</h4>
                   </div>
-                  {albumCoverUrl && (
-                    <img
-                      src={`${API_BASE_URL}${albumCoverUrl}`}
-                      alt={album.Title || "Album Cover"}
-                      className="album-cover"
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                      }}
-                    />
-                  )}
-                  <div className="album-info">
-                    {reviewText && (
-                      <div className="review-preview">
-                        <ReactMarkdown>{`${preview}${
-                          reviewText.split(" ").length > 20 ? " ..." : ""
-                        }`}</ReactMarkdown>
-                      </div>
+
+                  <div className="album-content">
+                    {albumCoverUrl && (
+                      <img
+                        src={`${API_BASE_URL}${albumCoverUrl}`}
+                        alt={album.Title || "Album Cover"}
+                        className="album-cover"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
+                      />
                     )}
-                    <p className="read-more">Read more</p>
+                    <div className="album-info">
+                      {reviewText && (
+                        <div className="review-preview">
+                          <ReactMarkdown>{`${preview}${
+                            reviewText.split(" ").length > 20 ? " ..." : ""
+                          }`}</ReactMarkdown>
+                        </div>
+                      )}
+                      <p className="read-more">Read more</p>
+                    </div>
                   </div>
                 </li>
               </Link>
