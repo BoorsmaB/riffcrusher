@@ -23,7 +23,10 @@
   color: black;
   display: grid;
   grid-template-columns: 120px 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "header header"
+    "cover info";
   grid-gap: 20px;
   min-height: 130px;
 }
@@ -33,7 +36,7 @@
 }
 
 .album-header {
-  grid-column: 1 / -1;
+  grid-area: header;
   text-align: center;
   margin-bottom: 8px;
 }
@@ -53,6 +56,7 @@
 }
 
 .album-cover {
+  grid-area: cover;
   width: 110px;
   height: 110px;
   object-fit: cover;
@@ -62,6 +66,7 @@
 }
 
 .album-info {
+  grid-area: info;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
