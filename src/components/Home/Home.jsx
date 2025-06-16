@@ -86,29 +86,32 @@ function Home() {
                     {band} - {title}
                   </h3>
                 </div>
-                {albumCoverUrl && (
-                  <img
-                    src={`${API_BASE_URL}${albumCoverUrl}`}
-                    alt={title}
-                    className="album-cover"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                    }}
-                  />
-                )}
-                <div className="album-info">
-                  {reviewText && (
-                    <>
-                      <div className="review-preview">
-                        <ReactMarkdown>
-                          {`${preview}${
-                            reviewText.split(" ").length > 20 ? " ..." : ""
-                          }`}
-                        </ReactMarkdown>
-                      </div>
-                      <p className="read-more">Read more</p>
-                    </>
+
+                <div className="album-content">
+                  {albumCoverUrl && (
+                    <img
+                      src={`${API_BASE_URL}${albumCoverUrl}`}
+                      alt={title}
+                      className="album-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
                   )}
+                  <div className="album-info">
+                    {reviewText && (
+                      <>
+                        <div className="review-preview">
+                          <ReactMarkdown>
+                            {`${preview}${
+                              reviewText.split(" ").length > 20 ? " ..." : ""
+                            }`}
+                          </ReactMarkdown>
+                        </div>
+                        <p className="read-more">Read more</p>
+                      </>
+                    )}
+                  </div>
                 </div>
               </li>
             </Link>
