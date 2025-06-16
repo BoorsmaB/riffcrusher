@@ -103,7 +103,7 @@ function Review() {
     }
   };
 
-  if (!review) return <div>Loading review...</div>;
+  if (!review) return <div className="loading">Loading review...</div>;
 
   // In Strapi v5, the data structure is flatter
   const albumCoverUrl = review.Albumcover?.url || null;
@@ -115,87 +115,104 @@ function Review() {
 
   return (
     <div className="review-container">
-      <div className="home-container">
+      <div className="review-content">
         <div className="review-header">
           {albumCoverUrl && (
-            <img
-              src={`${API_BASE_URL}${albumCoverUrl}`}
-              alt={review.Title || "Album Cover"}
-              className="review-cover"
-            />
+            <div className="album-cover-container">
+              <img
+                src={`${API_BASE_URL}${albumCoverUrl}`}
+                alt={review.Title || "Album Cover"}
+                className="review-cover"
+              />
+            </div>
           )}
-          <h2 className="review-title">{review.Title || "Untitled"}</h2>
-          <h4>{review.Band || "Unknown Band"}</h4>
 
-          {writer && writer.username && (
-            <Link to={`/author/${writer.username}`}>
-              <Author author={writer} />
-            </Link>
-          )}
+          <div className="review-info">
+            <h1 className="review-title">{review.Title || "Untitled"}</h1>
+            <h2 className="band-name">{review.Band || "Unknown Band"}</h2>
+
+            {writer && writer.username && (
+              <div className="author-container">
+                <Link to={`/author/${writer.username}`} className="author-link">
+                  <Author author={writer} />
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
 
-        <MarkdownRenderer
-          content={review.Review || "No review content available."}
-        />
+        <div className="review-text">
+          <MarkdownRenderer
+            content={review.Review || "No review content available."}
+          />
+        </div>
 
         {videoHtml && (
           <div className="embedded-video-container">
             <div
               className="embedded-video"
               dangerouslySetInnerHTML={{ __html: videoHtml }}
-              style={{ width: "100%", height: "100%" }}
             />
           </div>
         )}
 
-        <p className="review-rating">
-          Our Rating:{" "}
-          <span className="rating-value">{review.Rating || "N/A"}</span>
-        </p>
+        <div className="rating-section">
+          <p className="review-rating">
+            Our Rating:{" "}
+            <span className="rating-value">{review.Rating || "N/A"}</span>
+          </p>
+        </div>
 
         <div className="your-rating-section">
-          <p className="your-rating-title">Your Rating:</p>
+          <h3 className="your-rating-title">Your Rating:</h3>
           <div className="response-buttons">
             <button
-              className={`good-button ${
+              className={`rating-button good-button ${
                 selectedButton === "Good" ? "selected" : ""
               }`}
               onClick={() => handleButtonClick("Good")}
             >
-              Good ({review.Good || 0})
+              <span className="button-text">Good</span>
+              <span className="button-count">({review.Good || 0})</span>
             </button>
             <button
-              className={`okay-button ${
+              className={`rating-button okay-button ${
                 selectedButton === "Okay" ? "selected" : ""
               }`}
               onClick={() => handleButtonClick("Okay")}
             >
-              Okay ({review.Okay || 0})
+              <span className="button-text">Okay</span>
+              <span className="button-count">({review.Okay || 0})</span>
             </button>
             <button
-              className={`bad-button ${
+              className={`rating-button bad-button ${
                 selectedButton === "Bad" ? "selected" : ""
               }`}
               onClick={() => handleButtonClick("Bad")}
             >
-              Bad ({review.Bad || 0})
+              <span className="button-text">Bad</span>
+              <span className="button-count">({review.Bad || 0})</span>
             </button>
           </div>
         </div>
 
-        <p className="tags-title">Tags:</p>
-        {review.tags && review.tags.length > 0 ? (
-          <Tags tags={review.tags} />
-        ) : (
-          <p>No tags available.</p>
-        )}
+        <div className="tags-section">
+          <h3 className="tags-title">Tags:</h3>
+          {review.tags && review.tags.length > 0 ? (
+            <Tags tags={review.tags} />
+          ) : (
+            <p className="no-tags">No tags available.</p>
+          )}
+        </div>
 
         {bannerReviewUrl && (
-          <img
-            src={`${API_BASE_URL}${bannerReviewUrl}`}
-            alt="Banner Review"
-            className="banner-review"
-          />
+          <div className="banner-container">
+            <img
+              src={`${API_BASE_URL}${bannerReviewUrl}`}
+              alt="Banner Review"
+              className="banner-review"
+            />
+          </div>
         )}
       </div>
     </div>

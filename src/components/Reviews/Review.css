@@ -1,117 +1,322 @@
-.review-text {
-  text-align: left;
-}
-
+/* Base styles */
 .review-container {
+  width: 100%;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  margin: auto;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.review-cover {
-  max-width: 350px;
-  max-height: 350px;
-  height: auto;
-  margin-bottom: 10px;
+.review-content {
+  width: 100%;
+  max-width: 800px;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 2rem;
+}
+
+/* Header Section */
 .review-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
 }
 
-.review-title {
-  font-size: 2em;
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-.review-rating {
-  font-size: 1.5em;
-}
-
-.tags-title {
-  font-size: 1.5em;
-}
-
-.rating-value {
-  font-weight: bolder;
-}
-
-.review-image-container {
+.album-cover-container {
+  width: 100%;
   display: flex;
   justify-content: center;
 }
 
-.centered-banner {
+.review-cover {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-info {
+  width: 100%;
+}
+
+.review-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+.band-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: #666;
+}
+
+.author-container {
+  margin-top: 1rem;
+}
+
+.author-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.author-link:hover {
+  opacity: 0.8;
+}
+
+/* Review Text */
+.review-text {
+  text-align: left;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Video Section */
+.embedded-video-container {
+  width: 100%;
+  margin: 2rem 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.embedded-video {
+  width: 100%;
+  min-height: 200px;
+}
+
+/* Rating Sections */
+.rating-section {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.review-rating {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.rating-value {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.your-rating-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.your-rating-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Response Buttons */
+.response-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.rating-button {
+  width: 100%;
+  max-width: 280px;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  touch-action: manipulation;
+}
+
+.button-text {
+  font-weight: bold;
+}
+
+.button-count {
+  font-weight: normal;
+  opacity: 0.8;
+}
+
+.rating-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rating-button:active {
+  transform: translateY(0);
+}
+
+.good-button:hover {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.okay-button:hover {
+  background-color: #ffc107;
+  color: #333;
+  border-color: #ffc107;
+}
+
+.bad-button:hover {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.selected.good-button {
+  background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
+}
+
+.selected.okay-button {
+  background-color: #ffc107 !important;
+  color: #333 !important;
+  border-color: #ffc107 !important;
+}
+
+.selected.bad-button {
+  background-color: #dc3545 !important;
+  color: white !important;
+  border-color: #dc3545 !important;
+}
+
+/* Tags Section */
+.tags-section {
+  margin: 2rem 0;
+}
+
+.tags-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.no-tags {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+/* Banner Section */
+.banner-container {
+  margin: 2rem 0 0 0;
   text-align: center;
 }
 
 .banner-review {
+  width: 100%;
   max-width: 100%;
   height: auto;
-  padding-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.review-author {
-  margin-top: 10px;
-  font-size: 1.2em;
-  font-weight: bold;
-  text-align: center; /* Adjust as needed for your layout */
+/* Tablet Styles */
+@media (min-width: 768px) {
+  .review-content {
+    padding: 2rem;
+  }
+
+  .review-header {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 2rem;
+  }
+
+  .album-cover-container {
+    flex-shrink: 0;
+    width: auto;
+  }
+
+  .review-cover {
+    max-width: 300px;
+  }
+
+  .review-info {
+    flex: 1;
+  }
+
+  .review-title {
+    font-size: 2.2rem;
+  }
+
+  .band-name {
+    font-size: 1.5rem;
+  }
+
+  .response-buttons {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .rating-button {
+    width: 160px;
+    margin: 0 0.5rem;
+  }
 }
 
-.embedded-video-container {
-  width: auto; /* Set width to auto to take up the full width of its content */
-  max-width: auto; /* Set a maximum width to avoid stretching on larger screens */
-  height: auto; /* Let the height adjust automatically based on the aspect ratio */
-  margin: 0 auto; /* Center horizontally */
-  text-align: center; /* Center the inner content */
+/* Desktop Styles */
+@media (min-width: 1024px) {
+  .review-content {
+    padding: 3rem;
+  }
+
+  .review-cover {
+    max-width: 350px;
+  }
+
+  .review-title {
+    font-size: 2.5rem;
+  }
+
+  .band-name {
+    font-size: 1.6rem;
+  }
+
+  .rating-button {
+    width: 180px;
+  }
+
+  .review-text {
+    font-size: 1.1rem;
+  }
 }
 
-.your-rating-title {
-  font-size: 1.5em;
-}
-
-.response-buttons {
-  display: flex;
-  justify-content: center;
-}
-
-.response-buttons button {
-  width: 200px;
-  height: 50px;
-  margin: 10px;
-  background-color: #d2d2d2;
-  color: black;
-  font-weight: bold;
-  font-size: 1.5em;
-  border: none;
-}
-
-.good-button:hover {
-  background-color: #33cc33;
-}
-
-.okay-button:hover {
-  background-color: #ffff33;
-}
-
-.bad-button:hover {
-  background-color: #ff4d4d;
-}
-
-.selected {
-  background-color: #33cc33 !important; /* Green for Good */
-}
-
-.selected.okay-button {
-  background-color: #ffff33 !important; /* Yellow for Okay */
-}
-
-.selected.bad-button {
-  background-color: #ff4d4d !important; /* Red for Bad */
+/* Large Desktop Styles */
+@media (min-width: 1200px) {
+  .review-content {
+    max-width: 1000px;
+  }
 }
