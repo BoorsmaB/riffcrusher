@@ -85,11 +85,11 @@
   .album-cover {
     width: 120px;
     height: 120px;
-    margin: 0 auto 10px auto;
+    margin: 0 auto 10px auto; /* Centers image */
   }
 
   .album-info {
-    align-items: center;
+    align-items: center; /* Center text content */
   }
 
   .album-info h3,
