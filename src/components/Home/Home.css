@@ -4,7 +4,6 @@
   padding: 20px;
   border-left: rgb(151, 22, 22) 3px solid;
   border-right: rgb(151, 22, 22) 3px solid;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .album-list {
@@ -23,11 +22,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   color: black;
-  transition: box-shadow 0.3s ease;
 }
 
 .album-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .album-link {
@@ -48,7 +46,6 @@
   border-radius: 8px;
   margin-right: 20px;
   filter: drop-shadow(0 0 10px rgb(0, 0, 0));
-  flex-shrink: 0;
 }
 
 .album-info {
@@ -68,74 +65,34 @@
   color: #555;
 }
 
-.review-preview {
-  font-weight: 400; /* normal weight */
-  line-height: 1.4; /* improve readability */
-  color: #333;
-  margin-top: 5px;
+.album-info p {
+  margin: 0;
+}
+
+.preview-text {
+  font-weight: normal;
 }
 
 .read-more {
   margin-top: 10px;
   color: black;
-  font-weight: 600;
-  font-size: 0.9em;
-  align-self: flex-start;
 }
 
 .read-more:hover {
-  color: #a00; /* subtle color on hover */
+  color: black;
 }
 
-/* Responsive tweaks */
 @media (max-width: 768px) {
   .album-card {
     flex-direction: column;
-    padding: 15px;
   }
 
   .album-cover {
-    width: 100%;
-    height: auto; /* keep aspect ratio */
-    max-height: 200px;
     margin-right: 0;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
 
   .album-info {
     text-align: center;
-  }
-
-  .album-info h3 {
-    font-size: 1.3em;
-  }
-
-  .album-info h4 {
-    font-size: 1.1em;
-  }
-
-  .review-preview {
-    font-size: 0.95em;
-    line-height: 1.5;
-  }
-
-  .read-more {
-    align-self: center;
-    font-size: 1em;
-  }
-}
-
-/* Logo styling (example) */
-.logo {
-  display: block;
-  margin: 0 auto 20px auto;
-  max-width: 180px;
-  height: auto;
-}
-
-@media (max-width: 768px) {
-  .logo {
-    max-width: 120px;
-    margin-bottom: 15px;
   }
 }
