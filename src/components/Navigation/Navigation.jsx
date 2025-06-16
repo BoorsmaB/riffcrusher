@@ -6,7 +6,7 @@ function Navigation() {
   return (
     <header>
       <div className="logo">
-        <img src="/assets/j_logo.png" alt="Logo" />
+        <img src="/assets/riffcrusherlogo.png" alt="Logo" />
         <p className="slogan">"We love everything loud!"</p>
       </div>
       <nav>

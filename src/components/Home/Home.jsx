@@ -53,7 +53,7 @@ function Home() {
 
   return (
     <div className="home-container">
-      <h2>Welcome to Jovanaar Reviews</h2>
+      <h2>Welcome to Riffcrusher</h2>
       <p>Check out the latest reviews of the newest metal records worldwide.</p>
       <p>
         <u>

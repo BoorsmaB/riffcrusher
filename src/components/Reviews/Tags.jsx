@@ -1,25 +1,27 @@
 import React from "react";
 import "./Tags.css";
 
-const Tags = ({ tags }) => {
+function Tags({ tags }) {
+  if (!tags || tags.length === 0) return null;
+
   return (
     <div className="tags-container">
-      {tags?.data?.map((tag) => {
-        const slug = tag?.attributes?.slug;
-        const title = tag?.attributes?.title;
-
-        if (!slug || !title) return null; // Skip malformed tags
-
-        const tagSlug = slug.toLowerCase();
+      {tags.map((tag) => {
+        const slug = (tag.slug || tag.name)
+          .toLowerCase()
+          .replace(/\s+/g, "")
+          .replace(/[^\w-]/g, ""); // sanitize
+        const title = tag.genrename || tag.name;
+        const tagClass = `tag tag-${slug}`;
 
         return (
-          <span key={tag.id} className={`tag tag-${tagSlug}`}>
+          <span key={tag.id} className={tagClass}>
             {title}
           </span>
         );
       })}
     </div>
   );
-};
+}
 
 export default Tags;

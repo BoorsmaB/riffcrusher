@@ -185,7 +185,7 @@ function Review() {
 
         <p className="tags-title">Tags:</p>
         {review.tags && review.tags.length > 0 ? (
-          <Tags tags={{ data: review.tags }} />
+          <Tags tags={review.tags} />
         ) : (
           <p>No tags available.</p>
         )}
