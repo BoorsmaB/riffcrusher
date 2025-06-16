@@ -10,34 +10,34 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
 function Review() {
-  const { id } = useParams();
+  const { id } = useParams(); // This should now be the documentId
   const [review, setReview] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
 
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        console.log("useParams ID:", id);
+        console.log("useParams ID (documentId):", id);
 
         const response = await axios.get(
-          `${API_BASE_URL}/api/metal-reviews/${id}?populate[Albumcover]=*&populate[BannerReview]=*&populate[tags]=*&populate[Writer]=*`,
-          API_TOKEN
-            ? {
-                headers: {
-                  Authorization: `Bearer ${API_TOKEN}`,
-                },
-              }
-            : {}
+          `${API_BASE_URL}/api/metal-reviews/${id}?populate=*`,
+          {
+            headers: {
+              ...(API_TOKEN && { Authorization: `Bearer ${API_TOKEN}` }),
+              "Content-Type": "application/json",
+            },
+          }
         );
 
         console.log("Full response data:", response.data);
         console.log("Review object:", response.data?.data);
-        console.log("Attributes:", response.data?.data?.attributes);
+        console.log("Attributes:", response.data?.data);
 
         if (response.data?.data) {
           setReview(response.data.data);
 
-          const localStorageKey = `review_${id}`;
+          // Use documentId for localStorage key
+          const localStorageKey = `review_${response.data.data.documentId}`;
           const hasVoted = localStorage.getItem(localStorageKey);
           if (hasVoted) {
             setSelectedButton(hasVoted);
@@ -47,6 +47,7 @@ function Review() {
         }
       } catch (error) {
         console.error("Error fetching review:", error);
+        console.error("Error response:", error.response?.data);
       }
     };
 
@@ -56,12 +57,12 @@ function Review() {
   const handleButtonClick = async (type) => {
     if (!review || selectedButton === type) return;
 
-    const currentData = review.attributes;
+    const currentData = review; // In Strapi v5, data is directly on the review object
 
     try {
       let newCount = currentData[type] ? currentData[type] + 1 : 1;
 
-      const previousVote = localStorage.getItem(`review_${id}`);
+      const previousVote = localStorage.getItem(`review_${review.documentId}`);
       if (previousVote && previousVote !== type) {
         const previousCount = currentData[previousVote]
           ? currentData[previousVote] - 1
@@ -69,39 +70,33 @@ function Review() {
 
         setReview((prev) => ({
           ...prev,
-          attributes: {
-            ...prev.attributes,
-            [previousVote]: previousCount,
-            [type]: newCount,
-          },
+          [previousVote]: previousCount,
+          [type]: newCount,
         }));
       } else {
         setReview((prev) => ({
           ...prev,
-          attributes: {
-            ...prev.attributes,
-            [type]: newCount,
-          },
+          [type]: newCount,
         }));
       }
 
+      // Update using documentId
       await axios.put(
-        `${API_BASE_URL}/api/metal-reviews/${id}`,
+        `${API_BASE_URL}/api/metal-reviews/${review.documentId}`,
         {
           data: {
             [type]: newCount,
           },
         },
-        API_TOKEN
-          ? {
-              headers: {
-                Authorization: `Bearer ${API_TOKEN}`,
-              },
-            }
-          : {}
+        {
+          headers: {
+            ...(API_TOKEN && { Authorization: `Bearer ${API_TOKEN}` }),
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      localStorage.setItem(`review_${id}`, type);
+      localStorage.setItem(`review_${review.documentId}`, type);
       setSelectedButton(type);
     } catch (error) {
       console.error("Error updating review:", error);
@@ -110,13 +105,13 @@ function Review() {
 
   if (!review) return <div>Loading review...</div>;
 
-  const attrs = review.attributes || {};
-  const albumCoverUrl = attrs.Albumcover?.data?.attributes?.url;
-  const bannerReviewUrl = attrs.BannerReview?.data?.attributes?.url;
-  const writer = attrs.Writer?.data?.attributes;
+  // In Strapi v5, the data structure is flatter
+  const albumCoverUrl = review.Albumcover?.url || null;
+  const bannerReviewUrl = review.BannerReview?.url || null;
+  const writer = review.Writer || null;
 
-  const oembed = attrs.oembed ? JSON.parse(attrs.oembed) : null;
-  const videoHtml = oembed?.rawData?.html;
+  const oembed = review.oembed ? JSON.parse(review.oembed) : null;
+  const videoHtml = oembed?.rawData?.html || null;
 
   return (
     <div className="review-container">
@@ -125,14 +120,14 @@ function Review() {
           {albumCoverUrl && (
             <img
               src={`${API_BASE_URL}${albumCoverUrl}`}
-              alt={attrs.Title || "Album Cover"}
+              alt={review.Title || "Album Cover"}
               className="review-cover"
             />
           )}
-          <h2 className="review-title">{attrs.Title || "Untitled"}</h2>
-          <h4>{attrs.Band || "Unknown Band"}</h4>
+          <h2 className="review-title">{review.Title || "Untitled"}</h2>
+          <h4>{review.Band || "Unknown Band"}</h4>
 
-          {writer && (
+          {writer && writer.username && (
             <Link to={`/author/${writer.username}`}>
               <Author author={writer} />
             </Link>
@@ -140,7 +135,7 @@ function Review() {
         </div>
 
         <MarkdownRenderer
-          content={attrs.Review || "No review content available."}
+          content={review.Review || "No review content available."}
         />
 
         {videoHtml && (
@@ -155,7 +150,7 @@ function Review() {
 
         <p className="review-rating">
           Our Rating:{" "}
-          <span className="rating-value">{attrs.Rating || "N/A"}</span>
+          <span className="rating-value">{review.Rating || "N/A"}</span>
         </p>
 
         <div className="your-rating-section">
@@ -167,7 +162,7 @@ function Review() {
               }`}
               onClick={() => handleButtonClick("Good")}
             >
-              Good ({attrs.Good || 0})
+              Good ({review.Good || 0})
             </button>
             <button
               className={`okay-button ${
@@ -175,7 +170,7 @@ function Review() {
               }`}
               onClick={() => handleButtonClick("Okay")}
             >
-              Okay ({attrs.Okay || 0})
+              Okay ({review.Okay || 0})
             </button>
             <button
               className={`bad-button ${
@@ -183,13 +178,17 @@ function Review() {
               }`}
               onClick={() => handleButtonClick("Bad")}
             >
-              Bad ({attrs.Bad || 0})
+              Bad ({review.Bad || 0})
             </button>
           </div>
         </div>
 
         <p className="tags-title">Tags:</p>
-        {attrs.tags ? <Tags tags={attrs.tags} /> : <p>No tags available.</p>}
+        {review.tags && review.tags.length > 0 ? (
+          <Tags tags={{ data: review.tags }} />
+        ) : (
+          <p>No tags available.</p>
+        )}
 
         {bannerReviewUrl && (
           <img
