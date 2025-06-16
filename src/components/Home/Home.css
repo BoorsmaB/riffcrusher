@@ -17,15 +17,15 @@
   margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 10px;
+  padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   color: black;
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 120px 1fr;
   grid-template-rows: auto 1fr;
-  grid-gap: 16px;
-  min-height: 120px;
+  grid-gap: 20px;
+  min-height: 130px;
 }
 
 .album-card:hover {
@@ -53,8 +53,8 @@
 }
 
 .album-cover {
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   object-fit: cover;
   border-radius: 6px;
   filter: drop-shadow(0 0 5px rgb(0, 0, 0));
@@ -105,19 +105,22 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
-    gap: 10px;
-    padding: 12px;
+    gap: 12px;
+    padding: 15px;
+    text-align: center;
   }
 
   .album-header {
     grid-row: 1;
     grid-column: 1;
+    margin-bottom: 8px;
   }
 
   .album-cover {
     grid-row: 2;
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
+    justify-self: center;
     margin: 0 auto;
   }
 
