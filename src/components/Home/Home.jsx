@@ -14,7 +14,7 @@ function Home() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/metal-reviews?_limit=10&_sort=publishedAt:DESC&populate=*`,
+          `${API_BASE_URL}/api/metal-reviews?pagination[limit]=10&sort=publishedAt:DESC&populate=*`,
           {
             headers: {
               Authorization: `Bearer ${API_TOKEN}`,
@@ -22,7 +22,15 @@ function Home() {
           }
         );
         if (response.data && response.data.data) {
-          setRecentAlbums(response.data.data);
+          // Flatten album data if returned inside .attributes
+          const albums = response.data.data.map((item) => {
+            return {
+              id: item.id,
+              documentId: item.documentId,
+              ...item, // Keep top-level fields like Title, Band, Albumcover
+            };
+          });
+          setRecentAlbums(albums);
         } else {
           console.error(
             "Recent albums data not found in the response:",
@@ -56,35 +64,48 @@ function Home() {
       <h2>Recent Reviewed Albums</h2>
       <ul className="album-list">
         {recentAlbums.map((album) => {
-          const albumCoverUrl = album.Albumcover?.url || null;
-          const cardStyle = {
-            backgroundColor: "rgb(210, 210, 210)",
-            color: "black",
-          };
-
+          const albumId = album.documentId || album.id;
+          const title = album.Title || "Unknown Title";
+          const band = album.Band || "Unknown Band";
           const reviewText = album.Review || "";
           const preview = reviewText.split(" ").slice(0, 20).join(" ");
+          const albumCoverUrl = album.Albumcover?.url || null;
 
           return (
             <Link
-              to={`/review/${album.id}`}
+              to={`/review/${albumId}`}
               className="album-link"
-              key={album.id}
+              key={albumId}
             >
-              <li className="album-card" style={cardStyle}>
+              <li
+                className="album-card"
+                style={{
+                  backgroundColor: "rgb(210, 210, 210)",
+                  color: "black",
+                }}
+              >
                 {albumCoverUrl && (
                   <img
                     src={`${API_BASE_URL}${albumCoverUrl}`}
-                    alt={album.Title || "Album Cover"}
+                    alt={title}
                     className="album-cover"
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                    }}
                   />
                 )}
                 <div className="album-info">
-                  <h3>{album.Title || "Unknown Title"}</h3>
-                  <h4>{album.Band || "Unknown Band"}</h4>
-                  <div className="review-preview">
-                    <ReactMarkdown>{`${preview} ...`}</ReactMarkdown>
-                  </div>
+                  <h3>{title}</h3>
+                  <h4>{band}</h4>
+                  {reviewText && (
+                    <div className="review-preview">
+                      <ReactMarkdown>
+                        {`${preview}${
+                          reviewText.split(" ").length > 20 ? " ..." : ""
+                        }`}
+                      </ReactMarkdown>
+                    </div>
+                  )}
                   <p className="read-more">Read more</p>
                 </div>
               </li>

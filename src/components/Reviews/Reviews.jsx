@@ -11,6 +11,7 @@ const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 function Reviews() {
   const [reviewedAlbums, setReviewedAlbums] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +31,7 @@ function Reviews() {
         }
       } catch (error) {
         console.error("Error fetching reviewed albums:", error);
+        setError("Failed to load albums. Please try again later.");
         setReviewedAlbums([]);
       }
     };
@@ -37,8 +39,12 @@ function Reviews() {
     fetchData();
   }, []);
 
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   if (reviewedAlbums === null) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   const filteredAlbums = reviewedAlbums.filter((album) => {
@@ -52,43 +58,60 @@ function Reviews() {
     <div className="home-container">
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <h2>All Albums</h2>
-      <ul className="album-list">
-        {filteredAlbums.map((album) => {
-          const albumCoverUrl = album.Albumcover?.url || null;
-          const cardStyle = {
-            backgroundColor: "rgb(210, 210, 210)",
-            color: "black",
-          };
-          const reviewText = album.Review || "";
-          const preview = reviewText.split(" ").slice(0, 20).join(" ");
+      {filteredAlbums.length === 0 ? (
+        <div className="no-results">
+          {searchQuery
+            ? "No albums found matching your search."
+            : "No albums available."}
+        </div>
+      ) : (
+        <ul className="album-list">
+          {filteredAlbums.map((album) => {
+            // Use documentId for Strapi v5 compatibility, fallback to id
+            const albumId = album.documentId || album.id;
+            const albumCoverUrl = album.Albumcover?.url || null;
+            const cardStyle = {
+              backgroundColor: "rgb(210, 210, 210)",
+              color: "black",
+            };
+            const reviewText = album.Review || "";
+            const preview = reviewText.split(" ").slice(0, 20).join(" ");
 
-          return (
-            <Link
-              to={`/review/${album.id}`}
-              className="album-link"
-              key={album.id}
-            >
-              <li className="album-card" style={cardStyle}>
-                {albumCoverUrl && (
-                  <img
-                    src={`${API_BASE_URL}${albumCoverUrl}`}
-                    alt={album.Title || "Album Cover"}
-                    className="album-cover"
-                  />
-                )}
-                <div className="album-info">
-                  <h3>{album.Title || "Unknown Title"}</h3>
-                  <h4>{album.Band || "Unknown Band"}</h4>
-                  <div className="review-preview">
-                    <ReactMarkdown>{`${preview} ...`}</ReactMarkdown>
+            return (
+              <Link
+                to={`/review/${albumId}`}
+                className="album-link"
+                key={albumId}
+              >
+                <li className="album-card" style={cardStyle}>
+                  {albumCoverUrl && (
+                    <img
+                      src={`${API_BASE_URL}${albumCoverUrl}`}
+                      alt={album.Title || "Album Cover"}
+                      className="album-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  )}
+                  <div className="album-info">
+                    <h3>{album.Title || "Unknown Title"}</h3>
+                    <h4>{album.Band || "Unknown Band"}</h4>
+                    {reviewText && (
+                      <div className="review-preview">
+                        <ReactMarkdown>{`${preview}${
+                          reviewText.split(" ").length > 20 ? " ..." : ""
+                        }`}</ReactMarkdown>
+                      </div>
+                    )}
+                    <p className="read-more">Read more</p>
                   </div>
-                  <p className="read-more">Read more</p>
-                </div>
-              </li>
-            </Link>
-          );
-        })}
-      </ul>
+                </li>
+              </Link>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 }
