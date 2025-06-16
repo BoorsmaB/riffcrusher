@@ -67,13 +67,8 @@ function Reviews() {
       ) : (
         <ul className="album-list">
           {filteredAlbums.map((album) => {
-            // Use documentId for Strapi v5 compatibility, fallback to id
             const albumId = album.documentId || album.id;
             const albumCoverUrl = album.Albumcover?.url || null;
-            const cardStyle = {
-              backgroundColor: "rgb(210, 210, 210)",
-              color: "black",
-            };
             const reviewText = album.Review || "";
             const preview = reviewText.split(" ").slice(0, 20).join(" ");
 
@@ -83,7 +78,11 @@ function Reviews() {
                 className="album-link"
                 key={albumId}
               >
-                <li className="album-card" style={cardStyle}>
+                <li className="album-card">
+                  <div className="album-header">
+                    <h3>{album.Title || "Unknown Title"}</h3>
+                    <h4>{album.Band || "Unknown Band"}</h4>
+                  </div>
                   {albumCoverUrl && (
                     <img
                       src={`${API_BASE_URL}${albumCoverUrl}`}
@@ -95,8 +94,6 @@ function Reviews() {
                     />
                   )}
                   <div className="album-info">
-                    <h3>{album.Title || "Unknown Title"}</h3>
-                    <h4>{album.Band || "Unknown Band"}</h4>
                     {reviewText && (
                       <div className="review-preview">
                         <ReactMarkdown>{`${preview}${
