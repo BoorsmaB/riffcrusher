@@ -2,10 +2,81 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
+import FastAverageColor from "fast-average-color";
 import "./Home.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_TOKEN = process.env.REACT_APP_API_TOKEN;
+
+const fac = new FastAverageColor();
+
+function AlbumCard({ album }) {
+  const [bgColor, setBgColor] = useState("#d2d2d2"); // default background
+  const albumCoverUrl = album.Albumcover?.url
+    ? `${API_BASE_URL}${album.Albumcover.url}`
+    : null;
+
+  const title = album.Title || "Unknown Title";
+  const band = album.Band || "Unknown Band";
+  const reviewText = album.Review || "";
+  const preview = reviewText.split(" ").slice(0, 20).join(" ");
+
+  const handleImageLoad = (e) => {
+    fac
+      .getColorAsync(e.target)
+      .then((color) => {
+        setBgColor(color.hex);
+      })
+      .catch(() => {
+        setBgColor("#d2d2d2"); // fallback if extraction fails
+      });
+  };
+
+  return (
+    <li
+      className="album-card"
+      style={{
+        backgroundColor: bgColor,
+        color: "black",
+      }}
+    >
+      <div className="album-header">
+        <h3 className="album-title">
+          {band} - {title}
+        </h3>
+      </div>
+
+      <div className="album-content">
+        {albumCoverUrl && (
+          <img
+            src={albumCoverUrl}
+            alt={title}
+            className="album-cover"
+            onLoad={handleImageLoad}
+            onError={(e) => {
+              e.target.style.display = "none";
+              setBgColor("#d2d2d2"); // fallback background if image missing
+            }}
+          />
+        )}
+        <div className="album-info">
+          {reviewText && (
+            <>
+              <div className="review-preview">
+                <ReactMarkdown>
+                  {`${preview}${
+                    reviewText.split(" ").length > 20 ? " ..." : ""
+                  }`}
+                </ReactMarkdown>
+              </div>
+              <p className="read-more">Read more</p>
+            </>
+          )}
+        </div>
+      </div>
+    </li>
+  );
+}
 
 function Home() {
   const [recentAlbums, setRecentAlbums] = useState(null);
@@ -29,10 +100,7 @@ function Home() {
           }));
           setRecentAlbums(albums);
         } else {
-          console.error(
-            "Recent albums data not found in the response:",
-            response.data
-          );
+          console.error("Recent albums data not found:", response.data);
           setRecentAlbums([]);
         }
       } catch (error) {
@@ -62,58 +130,13 @@ function Home() {
       <ul className="album-list">
         {recentAlbums.map((album) => {
           const albumId = album.documentId || album.id;
-          const title = album.Title || "Unknown Title";
-          const band = album.Band || "Unknown Band";
-          const reviewText = album.Review || "";
-          const preview = reviewText.split(" ").slice(0, 20).join(" ");
-          const albumCoverUrl = album.Albumcover?.url || null;
-
           return (
             <Link
               to={`/review/${albumId}`}
               className="album-link"
               key={albumId}
             >
-              <li
-                className="album-card"
-                style={{
-                  backgroundColor: "rgb(210, 210, 210)",
-                  color: "black",
-                }}
-              >
-                <div className="album-header">
-                  <h3 className="album-title">
-                    {band} - {title}
-                  </h3>
-                </div>
-
-                <div className="album-content">
-                  {albumCoverUrl && (
-                    <img
-                      src={`${API_BASE_URL}${albumCoverUrl}`}
-                      alt={title}
-                      className="album-cover"
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                      }}
-                    />
-                  )}
-                  <div className="album-info">
-                    {reviewText && (
-                      <>
-                        <div className="review-preview">
-                          <ReactMarkdown>
-                            {`${preview}${
-                              reviewText.split(" ").length > 20 ? " ..." : ""
-                            }`}
-                          </ReactMarkdown>
-                        </div>
-                        <p className="read-more">Read more</p>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </li>
+              <AlbumCard album={album} />
             </Link>
           );
         })}
