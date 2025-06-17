@@ -1,5 +1,6 @@
 .home-container {
   max-width: 800px;
+  max-height: 200px;
   margin: 0 auto;
   padding: 20px;
   border-left: rgb(151, 22, 22) 3px solid;
