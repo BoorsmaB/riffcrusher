@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
@@ -8,10 +8,9 @@ import "./Home.css";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
-const fac = new FastAverageColor();
-
 function AlbumCard({ album }) {
-  const [bgColor, setBgColor] = useState("#d2d2d2"); // default background
+  const [bgColor, setBgColor] = useState("#d2d2d2");
+  const imgRef = useRef(null);
   const albumCoverUrl = album.Albumcover?.url
     ? `${API_BASE_URL}${album.Albumcover.url}`
     : null;
@@ -21,16 +20,20 @@ function AlbumCard({ album }) {
   const reviewText = album.Review || "";
   const preview = reviewText.split(" ").slice(0, 20).join(" ");
 
-  const handleImageLoad = (e) => {
-    fac
-      .getColorAsync(e.target)
-      .then((color) => {
-        setBgColor(color.hex);
-      })
-      .catch(() => {
-        setBgColor("#d2d2d2"); // fallback if extraction fails
-      });
-  };
+  useEffect(() => {
+    if (imgRef.current && albumCoverUrl) {
+      const fac = new FastAverageColor();
+      fac
+        .getColorAsync(imgRef.current)
+        .then((color) => {
+          setBgColor(color.hex);
+        })
+        .catch((err) => {
+          console.error("Color extraction failed:", err);
+          setBgColor("#d2d2d2");
+        });
+    }
+  }, [albumCoverUrl]);
 
   return (
     <li
@@ -49,13 +52,14 @@ function AlbumCard({ album }) {
       <div className="album-content">
         {albumCoverUrl && (
           <img
+            ref={imgRef}
             src={albumCoverUrl}
             alt={title}
             className="album-cover"
-            onLoad={handleImageLoad}
+            crossOrigin="anonymous"
             onError={(e) => {
               e.target.style.display = "none";
-              setBgColor("#d2d2d2"); // fallback background if image missing
+              setBgColor("#d2d2d2");
             }}
           />
         )}
