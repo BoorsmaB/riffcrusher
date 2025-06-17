@@ -1,42 +1,48 @@
 header {
   background-color: rgb(151, 22, 22);
-  padding: 10px 20px;
+  padding: 20px 0;
 }
 
-/* Wrapper to align logo and nav */
+/* Center everything vertically and horizontally */
 .header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.logo {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
+/* LOGO SECTION */
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
 .logo img {
   max-width: 300px;
 }
 
+.slogan {
+  color: white;
+  margin-top: 10px;
+  font-weight: bolder;
+  font-size: 1rem;
+}
+
+/* NAVIGATION */
 nav ul {
   display: flex;
   list-style: none;
   padding: 0;
   margin: 0;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 nav ul li {
-  margin-right: 30px;
-  padding: 10px;
+  margin: 0 15px;
   font-weight: bold;
-}
-
-nav ul li:last-child {
-  margin-right: 0;
 }
 
 nav ul li a {
@@ -49,19 +55,8 @@ nav ul li a:hover {
   color: black;
 }
 
-.slogan {
-  color: white;
-  margin-top: 10px;
-  font-weight: bolder;
-}
-
-/* Styles for smaller screens */
+/* MOBILE */
 @media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    align-items: center;
-  }
-
   .logo img {
     max-width: 150px;
   }
