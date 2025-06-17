@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
-import FastAverageColor from "fast-average-color";
+import { FastAverageColor } from "fast-average-color";
 import "./Home.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
