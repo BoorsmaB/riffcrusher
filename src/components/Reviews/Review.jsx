@@ -10,15 +10,13 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
 function Review() {
-  const { id } = useParams(); // This should now be the documentId
+  const { id } = useParams();
   const [review, setReview] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
 
   useEffect(() => {
     const fetchReview = async () => {
       try {
-        console.log("useParams ID (documentId):", id);
-
         const response = await axios.get(
           `${API_BASE_URL}/api/metal-reviews/${id}?populate=*`,
           {
@@ -29,25 +27,20 @@ function Review() {
           }
         );
 
-        console.log("Full response data:", response.data);
-        console.log("Review object:", response.data?.data);
-        console.log("Attributes:", response.data?.data);
-
         if (response.data?.data) {
-          setReview(response.data.data);
+          const fetchedReview = response.data.data;
+          setReview(fetchedReview);
 
-          // Use documentId for localStorage key
-          const localStorageKey = `review_${response.data.data.documentId}`;
-          const hasVoted = localStorage.getItem(localStorageKey);
-          if (hasVoted) {
-            setSelectedButton(hasVoted);
+          const localStorageKey = `review_${fetchedReview.documentId}`;
+          const storedVote = localStorage.getItem(localStorageKey);
+          if (storedVote) {
+            setSelectedButton(storedVote);
           }
         } else {
-          console.error("Review data not found in the response.");
+          console.error("Review data missing.");
         }
       } catch (error) {
         console.error("Error fetching review:", error);
-        console.error("Error response:", error.response?.data);
       }
     };
 
@@ -57,35 +50,30 @@ function Review() {
   const handleButtonClick = async (type) => {
     if (!review || selectedButton === type) return;
 
-    const currentData = review; // In Strapi v5, data is directly on the review object
-
     try {
-      let newCount = currentData[type] ? currentData[type] + 1 : 1;
+      const prevVote = localStorage.getItem(`review_${review.documentId}`);
 
-      const previousVote = localStorage.getItem(`review_${review.documentId}`);
-      if (previousVote && previousVote !== type) {
-        const previousCount = currentData[previousVote]
-          ? currentData[previousVote] - 1
-          : 0;
+      const updatedReview = { ...review };
+      updatedReview[type] = (updatedReview[type] || 0) + 1;
 
-        setReview((prev) => ({
-          ...prev,
-          [previousVote]: previousCount,
-          [type]: newCount,
-        }));
-      } else {
-        setReview((prev) => ({
-          ...prev,
-          [type]: newCount,
-        }));
+      if (prevVote && prevVote !== type) {
+        updatedReview[prevVote] = Math.max(
+          (updatedReview[prevVote] || 1) - 1,
+          0
+        );
       }
 
-      // Update using documentId
+      setReview(updatedReview);
+      setSelectedButton(type);
+
       await axios.put(
         `${API_BASE_URL}/api/metal-reviews/${review.documentId}`,
         {
           data: {
-            [type]: newCount,
+            [type]: updatedReview[type],
+            ...(prevVote && prevVote !== type
+              ? { [prevVote]: updatedReview[prevVote] }
+              : {}),
           },
         },
         {
@@ -97,15 +85,13 @@ function Review() {
       );
 
       localStorage.setItem(`review_${review.documentId}`, type);
-      setSelectedButton(type);
     } catch (error) {
-      console.error("Error updating review:", error);
+      console.error("Error updating vote:", error);
     }
   };
 
   if (!review) return <div className="loading">Loading review...</div>;
 
-  // In Strapi v5, the data structure is flatter
   const albumCoverUrl = review.Albumcover?.url || null;
   const bannerReviewUrl = review.BannerReview?.url || null;
   const writer = review.Writer || null;
@@ -131,7 +117,7 @@ function Review() {
             <h1 className="review-title">{review.Title || "Untitled"}</h1>
             <h2 className="band-name">{review.Band || "Unknown Band"}</h2>
 
-            {writer && writer.username && (
+            {writer?.username && (
               <div className="author-container">
                 <Link to={`/author/${writer.username}`} className="author-link">
                   <Author author={writer} />
