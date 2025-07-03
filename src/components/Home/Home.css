@@ -19,7 +19,7 @@
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  color: black;
+  color: inherit; /* changed from black */
   display: flex;
   flex-direction: column;
   min-height: 130px;
@@ -38,7 +38,7 @@
   margin: 0;
   font-size: 1.2em;
   font-weight: bold;
-  color: #222;
+  color: inherit; /* changed from #222 */
 }
 
 .album-header h4 {
@@ -72,7 +72,7 @@
 
 .review-preview {
   font-size: 0.95em;
-  color: #222;
+  color: inherit; /* changed from #222 */
   line-height: 1.4em;
   margin-top: 0;
   margin-bottom: 8px;
@@ -81,13 +81,13 @@
 .read-more {
   margin-top: auto;
   font-weight: 600;
-  color: black;
+  color: inherit; /* changed from black */
   text-decoration: underline;
   align-self: flex-start;
 }
 
 .read-more:hover {
-  color: black;
+  color: inherit;
 }
 
 .album-link {
