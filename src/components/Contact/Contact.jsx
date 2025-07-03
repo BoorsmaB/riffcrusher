@@ -46,6 +46,12 @@ function Contact() {
         Do you have a question? A suggestion? Or perhaps you want to write for
         us?
       </p>
+      <p>
+        Want us to review your band? Send an E-mail to Riffcrusher666@gmail.com
+        either including a direct link to Spotify, Bandcamp or other platform.
+        Or include the media files within the mail. Please include as much info
+        as possible including your band logo and album cover.
+      </p>
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
