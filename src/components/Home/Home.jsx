@@ -18,7 +18,7 @@ function AlbumCard({ album }) {
   const title = album.Title || "Unknown Title";
   const band = album.Band || "Unknown Band";
   const reviewText = album.Review || "";
-  const preview = reviewText.split(" ").slice(0, 20).join(" ");
+  const preview = reviewText.split(" ").slice(0, 40).join(" ");
 
   useEffect(() => {
     if (imgRef.current && albumCoverUrl) {
@@ -69,7 +69,7 @@ function AlbumCard({ album }) {
               <div className="review-preview">
                 <ReactMarkdown>
                   {`${preview}${
-                    reviewText.split(" ").length > 20 ? " ..." : ""
+                    reviewText.split(" ").length > 40 ? " ..." : ""
                   }`}
                 </ReactMarkdown>
               </div>
