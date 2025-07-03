@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import MarkdownRenderer from "../MarkdownRenderer/MarkdownRenderer";
 import Tags from "./Tags";
 import "./Review.css";
 import Author from "./Author";
-import twemoji from "twemoji";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_TOKEN = process.env.REACT_APP_API_TOKEN; // Original token for review data
@@ -16,9 +15,6 @@ function Review() {
   const [review, setReview] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
   const [isVoting, setIsVoting] = useState(false); // Prevent multiple simultaneous votes
-
-  // Ref for the review text container to parse emojis
-  const reviewTextRef = useRef(null);
 
   useEffect(() => {
     const fetchReview = async () => {
@@ -53,19 +49,10 @@ function Review() {
     fetchReview();
   }, [id]);
 
-  // Parse emojis with twemoji whenever review changes
-  useEffect(() => {
-    if (reviewTextRef.current) {
-      twemoji.parse(reviewTextRef.current, {
-        folder: "svg",
-        ext: ".svg",
-      });
-    }
-  }, [review]);
-
   const handleButtonClick = async (type) => {
     if (!review || isVoting) return;
 
+    // Allow clicking the same button again (to remove vote)
     const isSameVote = selectedButton === type;
     const prevVote = localStorage.getItem(`review_${review.documentId}`);
 
@@ -95,16 +82,20 @@ function Review() {
         localStorage.setItem(`review_${review.documentId}`, type);
       }
 
+      // Update local state immediately for better UX
       setReview(updatedReview);
 
+      // Prepare data for API update
       const updateData = {
         [type]: updatedReview[type],
       };
 
+      // Include previous vote field if it was different
       if (prevVote && prevVote !== type && !isSameVote) {
         updateData[prevVote] = updatedReview[prevVote];
       }
 
+      // Use voting token for authentication
       await axios.put(
         `${API_BASE_URL}/api/metal-reviews/${review.documentId}`,
         {
@@ -124,12 +115,14 @@ function Review() {
     } catch (error) {
       console.error("Error updating vote:", error);
 
+      // Log more details about the error
       if (error.response) {
         console.error("Response status:", error.response.status);
         console.error("Response data:", error.response.data);
         console.error("Response headers:", error.response.headers);
       }
 
+      // Show user-friendly error message
       if (error.response?.status === 403) {
         console.error(
           "403 Forbidden - Check voting API token permissions in Strapi admin"
@@ -139,6 +132,7 @@ function Review() {
         );
       }
 
+      // Revert local state on error
       setReview(review);
       if (prevVote) {
         setSelectedButton(prevVote);
@@ -189,7 +183,7 @@ function Review() {
           </div>
         </div>
 
-        <div className="review-text" ref={reviewTextRef}>
+        <div className="review-text">
           <MarkdownRenderer
             content={review.Review || "No review content available."}
           />
