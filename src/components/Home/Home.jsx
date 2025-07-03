@@ -48,8 +48,9 @@ function AlbumCard({ album }) {
       }}
     >
       <div className="album-header">
-        <h3 style={{ color: textColor }}>{title}</h3>
-        <h4 style={{ color: textColor }}>{band}</h4>
+        <h3 className="album-title-line" style={{ color: textColor }}>
+          {band} – {title}
+        </h3>
       </div>
 
       <div className="album-content">
