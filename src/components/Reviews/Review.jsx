@@ -14,6 +14,7 @@ function Review() {
   const { id } = useParams();
   const [review, setReview] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
+  const [isVoting, setIsVoting] = useState(false); // Prevent multiple simultaneous votes
 
   useEffect(() => {
     const fetchReview = async () => {
@@ -49,34 +50,56 @@ function Review() {
   }, [id]);
 
   const handleButtonClick = async (type) => {
-    if (!review || selectedButton === type) return;
+    if (!review || isVoting) return;
+
+    // Allow clicking the same button again (to remove vote)
+    const isSameVote = selectedButton === type;
+    const prevVote = localStorage.getItem(`review_${review.documentId}`);
 
     try {
-      const prevVote = localStorage.getItem(`review_${review.documentId}`);
+      setIsVoting(true);
 
       const updatedReview = { ...review };
-      updatedReview[type] = (updatedReview[type] || 0) + 1;
 
-      if (prevVote && prevVote !== type) {
-        updatedReview[prevVote] = Math.max(
-          (updatedReview[prevVote] || 1) - 1,
-          0
-        );
+      if (isSameVote) {
+        // Remove the current vote
+        updatedReview[type] = Math.max((updatedReview[type] || 1) - 1, 0);
+        setSelectedButton(null);
+        localStorage.removeItem(`review_${review.documentId}`);
+      } else {
+        // Add new vote
+        updatedReview[type] = (updatedReview[type] || 0) + 1;
+
+        // Remove previous vote if it exists and is different
+        if (prevVote && prevVote !== type) {
+          updatedReview[prevVote] = Math.max(
+            (updatedReview[prevVote] || 1) - 1,
+            0
+          );
+        }
+
+        setSelectedButton(type);
+        localStorage.setItem(`review_${review.documentId}`, type);
       }
 
+      // Update local state immediately for better UX
       setReview(updatedReview);
-      setSelectedButton(type);
+
+      // Prepare data for API update
+      const updateData = {
+        [type]: updatedReview[type],
+      };
+
+      // Include previous vote field if it was different
+      if (prevVote && prevVote !== type && !isSameVote) {
+        updateData[prevVote] = updatedReview[prevVote];
+      }
 
       // Use voting API token for voting update
       await axios.put(
         `${API_BASE_URL}/api/metal-reviews/${review.documentId}`,
         {
-          data: {
-            [type]: updatedReview[type],
-            ...(prevVote && prevVote !== type
-              ? { [prevVote]: updatedReview[prevVote] }
-              : {}),
-          },
+          data: updateData,
         },
         {
           headers: {
@@ -88,9 +111,21 @@ function Review() {
         }
       );
 
-      localStorage.setItem(`review_${review.documentId}`, type);
+      console.log("Vote updated successfully:", updateData);
     } catch (error) {
       console.error("Error updating vote:", error);
+
+      // Revert local state on error
+      setReview(review);
+      if (prevVote) {
+        setSelectedButton(prevVote);
+        localStorage.setItem(`review_${review.documentId}`, prevVote);
+      } else {
+        setSelectedButton(null);
+        localStorage.removeItem(`review_${review.documentId}`);
+      }
+    } finally {
+      setIsVoting(false);
     }
   };
 
@@ -161,6 +196,7 @@ function Review() {
                 selectedButton === "Good" ? "selected" : ""
               }`}
               onClick={() => handleButtonClick("Good")}
+              disabled={isVoting}
             >
               <span className="button-text">Good</span>
               <span className="button-count">({review.Good || 0})</span>
@@ -170,6 +206,7 @@ function Review() {
                 selectedButton === "Okay" ? "selected" : ""
               }`}
               onClick={() => handleButtonClick("Okay")}
+              disabled={isVoting}
             >
               <span className="button-text">Okay</span>
               <span className="button-count">({review.Okay || 0})</span>
@@ -179,6 +216,7 @@ function Review() {
                 selectedButton === "Bad" ? "selected" : ""
               }`}
               onClick={() => handleButtonClick("Bad")}
+              disabled={isVoting}
             >
               <span className="button-text">Bad</span>
               <span className="button-count">({review.Bad || 0})</span>
