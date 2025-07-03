@@ -12,6 +12,7 @@ function AlbumCard({ album }) {
   const [bgColor, setBgColor] = useState("#d2d2d2");
   const [textColor, setTextColor] = useState("black");
   const imgRef = useRef(null);
+
   const albumCoverUrl = album.Albumcover?.url
     ? `${API_BASE_URL}${album.Albumcover.url}`
     : null;
@@ -35,9 +36,6 @@ function AlbumCard({ album }) {
           setBgColor("#d2d2d2");
           setTextColor("black");
         });
-    } else {
-      setBgColor("#d2d2d2");
-      setTextColor("black");
     }
   }, [albumCoverUrl]);
 
@@ -50,9 +48,8 @@ function AlbumCard({ album }) {
       }}
     >
       <div className="album-header">
-        <h3 className="album-title">
-          {band} - {title}
-        </h3>
+        <h3 style={{ color: textColor }}>{title}</h3>
+        <h4 style={{ color: textColor }}>{band}</h4>
       </div>
 
       <div className="album-content">
@@ -73,14 +70,16 @@ function AlbumCard({ album }) {
         <div className="album-info">
           {reviewText && (
             <>
-              <div className="review-preview">
+              <div className="review-preview" style={{ color: textColor }}>
                 <ReactMarkdown>
                   {`${preview}${
                     reviewText.split(" ").length > 40 ? " ..." : ""
                   }`}
                 </ReactMarkdown>
               </div>
-              <p className="read-more">Read more</p>
+              <p className="read-more" style={{ color: textColor }}>
+                Read more
+              </p>
             </>
           )}
         </div>
