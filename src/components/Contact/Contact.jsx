@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useForm, ValidationError } from "@formspree/react";
 import "./Contact.css";
 
 function Contact() {
@@ -8,43 +9,35 @@ function Contact() {
     message: "",
   });
 
+  // Initialize Formspree form handler with your form ID
+  const [state, handleSubmit] = useForm("xkgbeqvj");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  // Wrapper to sync formData with Formspree handleSubmit
+  const onSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Form Data:", formData);
-
-    try {
-      const response = await fetch(
-        "http://localhost:1337/api/contact-form-submissions",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: formData }),
-        }
-      );
-
-      if (response.ok) {
-        console.log("Form submitted successfully!");
-
-        setFormData({
-          name: "",
-          email: "",
-          message: "",
-        });
-      } else {
-        console.error("Failed to submit form:", response.statusText);
+    // Use Formspree's handleSubmit directly
+    handleSubmit(e).then(() => {
+      if (state.succeeded) {
+        // Clear local form state on success
+        setFormData({ name: "", email: "", message: "" });
       }
-    } catch (error) {
-      console.error("An error occurred while submitting the form:", error);
-    }
+    });
   };
+
+  if (state.succeeded) {
+    return (
+      <div className="contacts-container">
+        <h1>Contact</h1>
+        <p>Thanks for your message! We'll be in touch soon.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="contacts-container">
@@ -53,28 +46,30 @@ function Contact() {
         Do you have a question? A suggestion? Or perhaps you want to write for
         us?
       </p>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
           <input
-            type="text"
             id="name"
+            type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
           />
+          {/* No ValidationError here because Formspree doesn't validate 'name' */}
         </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
-            type="email"
             id="email"
+            type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
           />
+          <ValidationError prefix="Email" field="email" errors={state.errors} />
         </div>
         <div className="form-group">
           <label htmlFor="message">Message:</label>
@@ -84,9 +79,16 @@ function Contact() {
             value={formData.message}
             onChange={handleChange}
             required
-          ></textarea>
+          />
+          <ValidationError
+            prefix="Message"
+            field="message"
+            errors={state.errors}
+          />
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={state.submitting}>
+          Submit
+        </button>
       </form>
     </div>
   );
