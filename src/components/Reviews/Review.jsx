@@ -8,6 +8,7 @@ import Author from "./Author";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const API_TOKEN = process.env.REACT_APP_API_TOKEN; // Original token for review data
+const API_TOKEN_VOTING = process.env.REACT_APP_API_TOKEN_VOTING; // Voting token
 
 function Review() {
   const { id } = useParams();
@@ -94,7 +95,7 @@ function Review() {
         updateData[prevVote] = updatedReview[prevVote];
       }
 
-      // Use public role permissions (no API token)
+      // Use voting token for authentication
       await axios.put(
         `${API_BASE_URL}/api/metal-reviews/${review.documentId}`,
         {
@@ -102,6 +103,9 @@ function Review() {
         },
         {
           headers: {
+            ...(API_TOKEN_VOTING && {
+              Authorization: `Bearer ${API_TOKEN_VOTING}`,
+            }),
             "Content-Type": "application/json",
           },
         }
@@ -121,7 +125,7 @@ function Review() {
       // Show user-friendly error message
       if (error.response?.status === 403) {
         console.error(
-          "403 Forbidden - Check API token permissions in Strapi admin"
+          "403 Forbidden - Check voting API token permissions in Strapi admin"
         );
         alert(
           "Unable to save vote. Please check your permissions or contact support."
