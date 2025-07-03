@@ -11,6 +11,7 @@ const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
 function AlbumCard({ album }) {
   const [bgColor, setBgColor] = useState("#d2d2d2");
+  const [textColor, setTextColor] = useState("#000");
   const imgRef = useRef(null);
 
   const albumCoverUrl = album.Albumcover?.url
@@ -22,21 +23,37 @@ function AlbumCard({ album }) {
   const reviewText = album.Review || "";
   const preview = reviewText.split(" ").slice(0, 40).join(" ");
 
+  // Determine if a hex color is dark
+  function isDarkColor(hex) {
+    const r = parseInt(hex.substr(1, 2), 16);
+    const g = parseInt(hex.substr(3, 2), 16);
+    const b = parseInt(hex.substr(5, 2), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness < 128;
+  }
+
   useEffect(() => {
     if (imgRef.current && albumCoverUrl) {
       const fac = new FastAverageColor();
       fac
         .getColorAsync(imgRef.current)
-        .then((color) => setBgColor(color.hex))
+        .then((color) => {
+          setBgColor(color.hex);
+          setTextColor(isDarkColor(color.hex) ? "#fff" : "#000");
+        })
         .catch((err) => {
           console.error("Color extraction failed:", err);
           setBgColor("#d2d2d2");
+          setTextColor("#000");
         });
     }
   }, [albumCoverUrl]);
 
   return (
-    <li className="album-card" style={{ backgroundColor: bgColor }}>
+    <li
+      className="album-card"
+      style={{ backgroundColor: bgColor, color: textColor }}
+    >
       <div className="album-header">
         <h3 className="album-title-line">
           {band} – {title}
@@ -54,6 +71,7 @@ function AlbumCard({ album }) {
             onError={(e) => {
               e.target.style.display = "none";
               setBgColor("#d2d2d2");
+              setTextColor("#000");
             }}
           />
         )}
@@ -65,7 +83,9 @@ function AlbumCard({ album }) {
               </ReactMarkdown>
             </div>
           )}
-          <p className="read-more">Read more</p>
+          <p className="read-more" style={{ color: textColor }}>
+            Read more
+          </p>
         </div>
       </div>
     </li>
