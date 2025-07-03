@@ -10,6 +10,7 @@ const API_TOKEN = process.env.REACT_APP_API_TOKEN;
 
 function AlbumCard({ album }) {
   const [bgColor, setBgColor] = useState("#d2d2d2");
+  const [textColor, setTextColor] = useState("black");
   const imgRef = useRef(null);
   const albumCoverUrl = album.Albumcover?.url
     ? `${API_BASE_URL}${album.Albumcover.url}`
@@ -27,11 +28,16 @@ function AlbumCard({ album }) {
         .getColorAsync(imgRef.current)
         .then((color) => {
           setBgColor(color.hex);
+          setTextColor(color.isDark ? "white" : "black");
         })
         .catch((err) => {
           console.error("Color extraction failed:", err);
           setBgColor("#d2d2d2");
+          setTextColor("black");
         });
+    } else {
+      setBgColor("#d2d2d2");
+      setTextColor("black");
     }
   }, [albumCoverUrl]);
 
@@ -40,7 +46,7 @@ function AlbumCard({ album }) {
       className="album-card"
       style={{
         backgroundColor: bgColor,
-        color: "black",
+        color: textColor,
       }}
     >
       <div className="album-header">
@@ -60,6 +66,7 @@ function AlbumCard({ album }) {
             onError={(e) => {
               e.target.style.display = "none";
               setBgColor("#d2d2d2");
+              setTextColor("black");
             }}
           />
         )}
