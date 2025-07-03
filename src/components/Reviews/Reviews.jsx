@@ -38,8 +38,9 @@ function AlbumCard({ album }) {
   return (
     <li className="album-card" style={{ backgroundColor: bgColor }}>
       <div className="album-header">
-        <h3>{title}</h3>
-        <h4>{band}</h4>
+        <h3 className="album-title-line">
+          {band} – {title}
+        </h3>
       </div>
 
       <div className="album-content">
@@ -88,7 +89,10 @@ function Reviews() {
           }
         );
         if (response.data && response.data.data) {
-          setReviewedAlbums(response.data.data);
+          const sorted = [...response.data.data].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+          setReviewedAlbums(sorted);
         } else {
           setReviewedAlbums([]);
         }
@@ -102,13 +106,8 @@ function Reviews() {
     fetchData();
   }, []);
 
-  if (error) {
-    return <div className="error-message">{error}</div>;
-  }
-
-  if (reviewedAlbums === null) {
-    return <div className="loading">Loading...</div>;
-  }
+  if (error) return <div className="error-message">{error}</div>;
+  if (reviewedAlbums === null) return <div className="loading">Loading...</div>;
 
   const filteredAlbums = reviewedAlbums.filter((album) => {
     const band = album.Band || "";

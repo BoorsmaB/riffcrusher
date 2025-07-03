@@ -22,6 +22,14 @@
   margin-bottom: 15px;
 }
 
+.album-title-line {
+  margin: 0;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #222;
+  display: inline;
+}
+
 .album-content {
   display: flex;
   gap: 20px;
@@ -42,26 +50,6 @@
   flex-direction: column;
   justify-content: flex-start;
   flex: 1;
-}
-
-.album-header h3 {
-  margin: 0;
-  font-size: 1.3em;
-  font-weight: bold;
-  color: #222;
-  display: inline;
-}
-
-.album-header h4 {
-  margin: 4px 0 0 0;
-  font-size: 1em;
-  color: #666;
-  font-weight: normal;
-  display: inline;
-}
-
-.album-header h4::before {
-  content: " - ";
 }
 
 .review-preview {
