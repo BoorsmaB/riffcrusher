@@ -7,7 +7,8 @@ import "./Review.css";
 import Author from "./Author";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN;
+const API_TOKEN = process.env.REACT_APP_API_TOKEN; // Original token for review data
+const API_TOKEN_VOTING = process.env.REACT_APP_API_TOKEN_VOTING; // Voting token
 
 function Review() {
   const { id } = useParams();
@@ -66,6 +67,7 @@ function Review() {
       setReview(updatedReview);
       setSelectedButton(type);
 
+      // Use voting API token for voting update
       await axios.put(
         `${API_BASE_URL}/api/metal-reviews/${review.documentId}`,
         {
@@ -78,7 +80,9 @@ function Review() {
         },
         {
           headers: {
-            ...(API_TOKEN && { Authorization: `Bearer ${API_TOKEN}` }),
+            ...(API_TOKEN_VOTING && {
+              Authorization: `Bearer ${API_TOKEN_VOTING}`,
+            }),
             "Content-Type": "application/json",
           },
         }
