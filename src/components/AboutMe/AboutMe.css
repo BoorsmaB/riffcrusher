@@ -1,11 +1,19 @@
+/* Global fix for box sizing */
+* {
+  box-sizing: border-box;
+}
+
 .aboutme-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  overflow-x: hidden;
 }
 
 .aboutme-header {
   margin-bottom: 20px;
+  text-align: center;
+  padding: 0 10px;
 }
 
 .aboutme-card {
@@ -18,22 +26,28 @@
   background-color: #d2d2d2;
   color: black;
   font-weight: 600;
+  flex-wrap: wrap;
 }
 
 .aboutme-text {
   flex: 1;
+  word-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
 }
 
 .jova-avatar {
-  max-width: 350px;
+  max-width: 100%;
   height: auto;
   border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .social-buttons {
   display: flex;
+  flex-wrap: wrap;
   margin-top: 10px;
-  gap: 30px;
+  gap: 20px;
 }
 
 .social-icon {
@@ -41,16 +55,18 @@
   height: 40px;
   border-radius: 30%;
   padding: 5px;
-  border: black, solid, 2px;
+  border: 2px solid black;
 }
 
 @media (max-width: 768px) {
   .aboutme-card {
     flex-direction: column;
     align-items: center;
+    padding: 15px;
   }
 
-  .jova-avatar {
-    max-width: 100%;
+  .aboutme-text {
+    text-align: center;
+    padding: 0 10px;
   }
 }
