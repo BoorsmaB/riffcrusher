@@ -5,16 +5,17 @@ import MarkdownRenderer from "../MarkdownRenderer/MarkdownRenderer";
 import Tags from "./Tags";
 import "./Review.css";
 import Author from "./Author";
+import { Helmet } from "react-helmet"; // ✅ Helmet import
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const API_TOKEN = process.env.REACT_APP_API_TOKEN; // Original token for review data
-const API_TOKEN_VOTING = process.env.REACT_APP_API_TOKEN_VOTING; // Voting token
+const API_TOKEN = process.env.REACT_APP_API_TOKEN;
+const API_TOKEN_VOTING = process.env.REACT_APP_API_TOKEN_VOTING;
 
 function Review() {
   const { id } = useParams();
   const [review, setReview] = useState(null);
   const [selectedButton, setSelectedButton] = useState(null);
-  const [isVoting, setIsVoting] = useState(false); // Prevent multiple simultaneous votes
+  const [isVoting, setIsVoting] = useState(false);
 
   useEffect(() => {
     const fetchReview = async () => {
@@ -52,7 +53,6 @@ function Review() {
   const handleButtonClick = async (type) => {
     if (!review || isVoting) return;
 
-    // Allow clicking the same button again (to remove vote)
     const isSameVote = selectedButton === type;
     const prevVote = localStorage.getItem(`review_${review.documentId}`);
 
@@ -62,15 +62,12 @@ function Review() {
       const updatedReview = { ...review };
 
       if (isSameVote) {
-        // Remove the current vote
         updatedReview[type] = Math.max((updatedReview[type] || 1) - 1, 0);
         setSelectedButton(null);
         localStorage.removeItem(`review_${review.documentId}`);
       } else {
-        // Add new vote
         updatedReview[type] = (updatedReview[type] || 0) + 1;
 
-        // Remove previous vote if it exists and is different
         if (prevVote && prevVote !== type) {
           updatedReview[prevVote] = Math.max(
             (updatedReview[prevVote] || 1) - 1,
@@ -82,25 +79,16 @@ function Review() {
         localStorage.setItem(`review_${review.documentId}`, type);
       }
 
-      // Update local state immediately for better UX
       setReview(updatedReview);
 
-      // Prepare data for API update
-      const updateData = {
-        [type]: updatedReview[type],
-      };
-
-      // Include previous vote field if it was different
+      const updateData = { [type]: updatedReview[type] };
       if (prevVote && prevVote !== type && !isSameVote) {
         updateData[prevVote] = updatedReview[prevVote];
       }
 
-      // Use voting token for authentication
       await axios.put(
         `${API_BASE_URL}/api/metal-reviews/${review.documentId}`,
-        {
-          data: updateData,
-        },
+        { data: updateData },
         {
           headers: {
             ...(API_TOKEN_VOTING && {
@@ -114,25 +102,12 @@ function Review() {
       console.log("Vote updated successfully:", updateData);
     } catch (error) {
       console.error("Error updating vote:", error);
-
-      // Log more details about the error
-      if (error.response) {
-        console.error("Response status:", error.response.status);
-        console.error("Response data:", error.response.data);
-        console.error("Response headers:", error.response.headers);
-      }
-
-      // Show user-friendly error message
       if (error.response?.status === 403) {
-        console.error(
-          "403 Forbidden - Check voting API token permissions in Strapi admin"
-        );
         alert(
           "Unable to save vote. Please check your permissions or contact support."
         );
       }
 
-      // Revert local state on error
       setReview(review);
       if (prevVote) {
         setSelectedButton(prevVote);
@@ -155,8 +130,29 @@ function Review() {
   const oembed = review.oembed ? JSON.parse(review.oembed) : null;
   const videoHtml = oembed?.rawData?.html || null;
 
+  // ✅ SEO metadata
+  const pageTitle = `${review.Band || "Unknown Band"} – ${
+    review.Title || "Untitled"
+  } | RiffCrusher`;
+  const description = review.Review?.split(" ").slice(0, 30).join(" ") + "...";
+  const pageUrl = `https://www.riffcrusher.com/review/${id}`;
+  const ogImage = review.Albumcover?.url
+    ? `${API_BASE_URL}${review.Albumcover.url}`
+    : "https://www.riffcrusher.com/default-cover.jpg";
+
   return (
     <div className="review-container">
+      {/* ✅ Helmet dynamic metadata block */}
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
       <div className="review-content">
         <div className="review-header">
           {albumCoverUrl && (

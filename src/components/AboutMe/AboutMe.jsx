@@ -1,9 +1,25 @@
 import React from "react";
+import { Helmet } from "react-helmet"; // ✅ Import Helmet
 import "./AboutMe.css";
 
 function AboutMe() {
   return (
     <div className="aboutme-container">
+      {/* ✅ Add Helmet for SEO */}
+      <Helmet>
+        <title>
+          About Us | Jovanaar - Metal Music, Gaming & Content Creation
+        </title>
+        <meta name="description" content="Learn more about our team! " />
+        <meta property="og:title" content="About The Riffcrusher Team!" />
+        <meta
+          property="og:description"
+          content="Learn more from the Riffcrusher team."
+        />
+        <meta property="og:url" content="https://www.riffcrusher.com/about" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
       <div className="aboutme-header">
         <h1>About Us</h1>
         <h2>"We love everything loud."</h2>
@@ -20,15 +36,14 @@ function AboutMe() {
             from the Blackened-Death metal band "Onheil".
           </p>
           <p>
-            {" "}
             I've started this website because I wanted to combine my passion for
-            creating metal music, content creation and all my other hobbies.{" "}
+            creating metal music, content creation and all my other hobbies.
           </p>
           <p>
             I wanted a space where I could do whatever I want and since
             finishing my Front-End Developing studies, I've got the tools to do
             this myself as well.
-          </p>{" "}
+          </p>
           <p>
             Keep an eye on this space, because I'm interested in creating a
             community-driven platform bringing everyone together who enjoys loud

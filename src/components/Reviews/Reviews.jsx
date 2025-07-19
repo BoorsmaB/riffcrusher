@@ -4,6 +4,7 @@ import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import { FastAverageColor } from "fast-average-color";
 import SearchBar from "../SearchBar/SearchBar";
+import { Helmet } from "react-helmet"; // ✅ Helmet added
 import "./Reviews.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -23,7 +24,6 @@ function AlbumCard({ album }) {
   const reviewText = album.Review || "";
   const preview = reviewText.split(" ").slice(0, 40).join(" ");
 
-  // Determine if a hex color is dark
   function isDarkColor(hex) {
     const r = parseInt(hex.substr(1, 2), 16);
     const g = parseInt(hex.substr(3, 2), 16);
@@ -138,6 +138,25 @@ function Reviews() {
 
   return (
     <div className="home-container">
+      {/* ✅ Helmet block for SEO */}
+      <Helmet>
+        <title>All Metal Album Reviews | RiffCrusher</title>
+        <meta
+          name="description"
+          content="We love everything loud!. Check out the newest reviews, from huge bands to the underground."
+        />
+        <meta
+          property="og:title"
+          content="All Metal Album Reviews | RiffCrusher"
+        />
+        <meta
+          property="og:description"
+          content="We love everything loud!. Check out the newest reviews, from huge bands to the underground."
+        />
+        <meta property="og:url" content="https://www.riffcrusher.com/reviews" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <h2>All Albums</h2>
       {filteredAlbums.length === 0 ? (

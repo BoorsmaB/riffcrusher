@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm, ValidationError } from "@formspree/react";
+import { Helmet } from "react-helmet"; // ✅ Import Helmet
 import "./Contact.css";
 
 function Contact() {
@@ -33,6 +34,26 @@ function Contact() {
   if (state.succeeded) {
     return (
       <div className="contacts-container">
+        <Helmet>
+          <title>
+            Contact Us | Jovanaar - Reach Out for Metal Music, Reviews & More
+          </title>
+          <meta
+            name="description"
+            content="Suggestions? Or want to get in touch with us to be reviewed? Check out this page."
+          />
+          <meta property="og:title" content="Contact Us" />
+          <meta
+            property="og:description"
+            content="Suggestions? Or want to get in touch with us to be reviewed? Check out this page."
+          />
+          <meta
+            property="og:url"
+            content="https://www.riffcrusher.com/contact"
+          />
+          <meta name="twitter:card" content="summary_large_image" />
+        </Helmet>
+
         <h1>Contact</h1>
         <p>Thanks for your message! We'll be in touch soon.</p>
       </div>
@@ -41,6 +62,23 @@ function Contact() {
 
   return (
     <div className="contacts-container">
+      <Helmet>
+        <title>
+          Contact Us | Jovanaar - Reach Out for Metal Music, Reviews & More
+        </title>
+        <meta
+          name="description"
+          content="Suggestions? Or want to get in touch with us to be reviewed? Check out this page."
+        />
+        <meta property="og:title" content="Contact Us" />
+        <meta
+          property="og:description"
+          content="Suggestions? Or want to get in touch with us to be reviewed? Check out this page."
+        />
+        <meta property="og:url" content="https://www.riffcrusher.com/contact" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
       <h1>Contact</h1>
       <p>
         Do you have a question? A suggestion? Or perhaps you want to write for
