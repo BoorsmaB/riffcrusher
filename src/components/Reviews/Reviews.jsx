@@ -138,16 +138,15 @@ function Reviews() {
 
   return (
     <div className="home-container">
-      {/* ✅ Helmet block for SEO */}
       <Helmet>
-        <title>All Metal Album Reviews | RiffCrusher</title>
+        <title>Reviews | Riffcrusher</title>
         <meta
           name="description"
           content="We love everything loud!. Check out the newest reviews, from huge bands to the underground."
         />
         <meta
           property="og:title"
-          content="All Metal Album Reviews | RiffCrusher"
+          content="All Metal Album Reviews | Riffcrusher"
         />
         <meta
           property="og:description"

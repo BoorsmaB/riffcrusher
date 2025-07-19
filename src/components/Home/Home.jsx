@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import { FastAverageColor } from "fast-average-color";
+import { Helmet } from "react-helmet"; // ✅ Helmet for SEO
 import "./Home.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -129,7 +130,30 @@ function Home() {
 
   return (
     <div className="home-container">
-      <h2>Welcome to Riffcrusher</h2>
+      {/* ✅ Helmet for SEO */}
+      <Helmet>
+        <title>Home</title>
+        <meta
+          name="description"
+          content="We love everything loud!. Check out the newest reviews, from huge bands to the underground."
+        />
+        <meta
+          property="og:title"
+          content="Riffcrusher | Latest Metal Reviews"
+        />
+        <meta
+          property="og:description"
+          content="We love everything loud!. Check out the newest reviews, from huge bands to the underground."
+        />
+        <meta
+          property="og:image"
+          content="https://www.riffcrusher.com/social-preview.jpg"
+        />
+        <meta property="og:url" content="https://www.riffcrusher.com/" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
+
+      <h2>Welcome to RiffCrusher</h2>
       <p>Check out the latest reviews of the newest metal records worldwide.</p>
       <p>
         <u>
@@ -137,6 +161,7 @@ function Home() {
           <b>Contact</b> page and send us your information.
         </u>
       </p>
+
       <h2>Recent Reviewed Albums</h2>
       <ul className="album-list">
         {recentAlbums.map((album) => {

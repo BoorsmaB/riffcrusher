@@ -63,9 +63,7 @@ function Contact() {
   return (
     <div className="contacts-container">
       <Helmet>
-        <title>
-          Contact Us | Jovanaar - Reach Out for Metal Music, Reviews & More
-        </title>
+        <title>Contact Us</title>
         <meta
           name="description"
           content="Suggestions? Or want to get in touch with us to be reviewed? Check out this page."

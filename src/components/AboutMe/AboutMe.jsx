@@ -7,9 +7,7 @@ function AboutMe() {
     <div className="aboutme-container">
       {/* ✅ Add Helmet for SEO */}
       <Helmet>
-        <title>
-          About Us | Jovanaar - Metal Music, Gaming & Content Creation
-        </title>
+        <title>About Us</title>
         <meta name="description" content="Learn more about our team! " />
         <meta property="og:title" content="About The Riffcrusher Team!" />
         <meta
